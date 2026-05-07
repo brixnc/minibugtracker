@@ -6,6 +6,7 @@ import ch.brian.kihara.minibugtracker.bug.BugRepository;
 import ch.brian.kihara.minibugtracker.bug.BugStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 
 import java.util.Optional;
 

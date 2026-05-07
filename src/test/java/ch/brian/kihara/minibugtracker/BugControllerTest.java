@@ -1,16 +1,20 @@
-package ch.brian.kihara.minibugtracker.bug;
+package ch.brian.kihara.minibugtracker;
 
+import ch.brian.kihara.minibugtracker.bug.Bug;
+import ch.brian.kihara.minibugtracker.bug.BugPriority;
+import ch.brian.kihara.minibugtracker.bug.BugRepository;
+import ch.brian.kihara.minibugtracker.bug.BugStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Optional;
-
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -21,14 +25,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * JUnit test for the BugController, testing all CRUD endpoints.
  *
- * @SpringBootTest loads the entire application context (so the real BugService and
- *   BugRepository are used).
- * @AutoConfigureMockMvc gives us a MockMvc to send fake HTTP requests.
- * @WithMockUser(roles = "ADMIN") fakes a logged-in admin so security doesn't block us.
+ * Uses .with(jwt()) on each request to simulate an authenticated admin user,
+ * because the security config uses OAuth2 Resource Server with JWT.
  */
 @SpringBootTest
 @AutoConfigureMockMvc
-@WithMockUser(roles = "ADMIN")
 public class BugControllerTest {
 
     @Autowired
@@ -37,12 +38,8 @@ public class BugControllerTest {
     @Autowired
     private BugRepository bugRepository;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
-    /**
-     * Helper that builds a sample Bug for use in the tests.
-     */
     private Bug createTestBug() {
         Bug bug = new Bug();
         bug.setTitle("Controller Test Bug");
@@ -52,10 +49,15 @@ public class BugControllerTest {
         return bug;
     }
 
+    // Reusable: builds a fake JWT carrying ROLE_ADMIN authority
+    private static org.springframework.test.web.servlet.request.RequestPostProcessor adminJwt() {
+        return jwt().authorities(new SimpleGrantedAuthority("ROLE_ADMIN"));
+    }
+
     // READ all
     @Test
     void testGetAllBugs() throws Exception {
-        mockMvc.perform(get("/api/bugs"))
+        mockMvc.perform(get("/api/bugs").with(adminJwt()))
                 .andExpect(status().isOk());
     }
 
@@ -65,6 +67,7 @@ public class BugControllerTest {
         String json = objectMapper.writeValueAsString(createTestBug());
 
         mockMvc.perform(post("/api/bugs")
+                        .with(adminJwt())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
@@ -74,12 +77,12 @@ public class BugControllerTest {
     // UPDATE
     @Test
     void testUpdateBug() throws Exception {
-        // First save a bug to update
         Bug saved = bugRepository.save(createTestBug());
         saved.setStatus(BugStatus.CLOSED);
         String json = objectMapper.writeValueAsString(saved);
 
         mockMvc.perform(put("/api/bugs/" + saved.getId())
+                        .with(adminJwt())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
@@ -91,7 +94,7 @@ public class BugControllerTest {
     void testDeleteBug() throws Exception {
         Bug saved = bugRepository.save(createTestBug());
 
-        mockMvc.perform(delete("/api/bugs/" + saved.getId()))
+        mockMvc.perform(delete("/api/bugs/" + saved.getId()).with(adminJwt()))
                 .andExpect(status().isOk());
     }
 }

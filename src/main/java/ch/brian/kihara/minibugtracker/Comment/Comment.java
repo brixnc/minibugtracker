@@ -1,4 +1,4 @@
-package ch.brian.kihara.minibugtracker.Project;
+package ch.brian.kihara.minibugtracker.Comment;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
@@ -8,19 +8,23 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "projects")
-public class Project {
+@Table(name = "comments")
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
-    @Size(min = 2, max = 100)
-    private String name;
+    @Size(min = 1, max = 1000)
+    private String content;
 
-    @Size(max = 300)
-    private String description;
+    @NotNull
+    @Size(min = 2, max = 100)
+    private String author;
+
+    @NotNull
+    private Long bugId; // simple reference to the Bug
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -29,11 +33,14 @@ public class Project {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getContent() { return content; }
+    public void setContent(String content) { this.content = content; }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public String getAuthor() { return author; }
+    public void setAuthor(String author) { this.author = author; }
+
+    public Long getBugId() { return bugId; }
+    public void setBugId(Long bugId) { this.bugId = bugId; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }

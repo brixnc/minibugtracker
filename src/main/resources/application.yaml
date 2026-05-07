@@ -1,3 +1,18 @@
+server:
+  port: 9090
+
 spring:
-  application:
-    name: MiniBugTracker
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bugtracker_db
+    username: postgres
+    password: admin
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/minibugtracker

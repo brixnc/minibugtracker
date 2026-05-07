@@ -85,6 +85,45 @@
             <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webmvc-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-security</artifactId>
+            <version>1.8.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.c4-soft.springaddons</groupId>
+            <artifactId>spring-security-oauth2-test-addons</artifactId>
+            <version>4.5.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <groupId>org.mockito</groupId>
+            <scope>test</scope>
+            <version>5.21.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
     <build>

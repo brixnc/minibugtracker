@@ -59,8 +59,8 @@ public class SecurityConfig {
             Stream<GrantedAuthority> realmRoles = realmAccess == null
                     ? Stream.empty()
                     : ((List<String>) realmAccess.getOrDefault("roles", List.of()))
-                    .stream()
-                    .map(role -> new SimpleGrantedAuthority("ROLE_" + role));
+                      .stream()
+                      .map(role -> new SimpleGrantedAuthority("ROLE_" + role));
 
             Collection<GrantedAuthority> authorities = Stream
                     .concat(scopes.stream(), realmRoles)

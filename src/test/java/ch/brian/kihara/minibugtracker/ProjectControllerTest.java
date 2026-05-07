@@ -1,5 +1,14 @@
 package ch.brian.kihara.minibugtracker;
 
+import ch.brian.kihara.minibugtracker.Project.Project;
+import ch.brian.kihara.minibugtracker.Project.ProjectRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.MediaType;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.MockMvc;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ProjectControllerTest {
@@ -9,9 +18,6 @@ public class ProjectControllerTest {
 
     @Autowired
     private ProjectRepository projectRepository;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     private Project createTestProject() {
         Project p = new Project();

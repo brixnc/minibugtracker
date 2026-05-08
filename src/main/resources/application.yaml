@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/bugtracker_db
     username: postgres
-    password: admin
+    password: Colloccollo123#
   jpa:
     show-sql: true
     generate-ddl: true

@@ -279,7 +279,24 @@ npm run lint
 
 ---
 
-## 8. Weiterführende Dokumente
+## 8. Bildschirmfotos
+
+Die Aufnahmen zeigen die laufende Anwendung mit Beispieldaten.
+
+| Ansicht | Bild |
+|---------|------|
+| Startseite (abgemeldet) | ![Startseite](docs/screenshots/01-startseite.png) |
+| Dashboard | ![Dashboard](docs/screenshots/02-dashboard.png) |
+| Bug-Liste mit Filtern | ![Bug-Liste](docs/screenshots/03-bug-liste.png) |
+| Bug-Detail mit Kommentaren | ![Bug-Detail](docs/screenshots/04-bug-detail.png) |
+| Formular mit Validierungsfehler | ![Validierung](docs/screenshots/05-formular-validierung.png) |
+| Projekt-Übersicht | ![Projekte](docs/screenshots/06-projekte.png) |
+| Profil mit Rollen | ![Profil](docs/screenshots/07-profil.png) |
+| Dunkles Design | ![Dunkles Design](docs/screenshots/08-dunkles-design.png) |
+
+---
+
+## 9. Weiterführende Dokumente
 
 | Datei                          | Inhalt                                              |
 |--------------------------------|-----------------------------------------------------|

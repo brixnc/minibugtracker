@@ -20,8 +20,9 @@ welche Aktionen sichtbar und erlaubt sind.
 | Angular Material  | 18 mit eigenem Material-3-Theme (hell und dunkel)           |
 | Authentifizierung | `keycloak-angular` 16 / `keycloak-js` 25, OAuth 2 mit PKCE  |
 | Formulare         | Reactive Forms mit Validatoren analog zur Bean Validation des Backends |
-| Tests             | Karma und Jasmine, 22 Tests                                 |
+| Tests             | Karma und Jasmine, 31 Tests                                 |
 | Codestyle         | ESLint mit `angular-eslint` (Konfiguration des Angular-CLI-Demoprojekts) |
+| Schriften         | Roboto und Material Icons als npm-Pakete im Projekt, kein CDN nötig |
 
 ---
 
@@ -248,14 +249,16 @@ Backend – ein `403` wird abgefangen und als Meldung angezeigt.
 npm run test:ci
 ```
 
-22 Tests in vier Dateien:
+31 Tests in sechs Dateien:
 
-| Datei                        | Gegenstand                                                   |
-|------------------------------|--------------------------------------------------------------|
-| `bug.service.spec.ts`        | **Service-Test**: URL und HTTP-Methode je CRUD-Aufruf, Mapping der Antwort, Fehlerweitergabe |
-| `bug-list.component.spec.ts` | **Komponenten-Test**: Tabellenzeilen, Filterlogik, rollenabhängige Schaltflächen |
-| `auth.service.spec.ts`       | Rollenauswertung, Profil-Nachladen, Abmeldezustand            |
-| `app.component.spec.ts`      | Rahmen der Anwendung und Anmelde-Einstieg                     |
+| Datei                          | Gegenstand                                                   |
+|--------------------------------|--------------------------------------------------------------|
+| `bug.service.spec.ts`          | **Service-Test**: URL und HTTP-Methode je CRUD-Aufruf, Mapping der Antwort, Fehlerweitergabe |
+| `bug-list.component.spec.ts`   | **Komponenten-Test**: Tabellenzeilen, Filterlogik, rollenabhängige Schaltflächen |
+| `bug-detail.component.spec.ts` | Laden über den Routenparameter, Kommentarverlauf, Rollentrennung |
+| `auth.service.spec.ts`         | Rollenauswertung, Profil-Nachladen, Abmeldezustand            |
+| `app.component.spec.ts`        | Rahmen der Anwendung und Anmelde-Einstieg                     |
+| `paginator-intl.spec.ts`       | Deutsche Beschriftungen des Material-Paginators               |
 
 Backend und Keycloak werden dabei durch Testdoubles ersetzt
 (`HttpTestingController`, `KeycloakServiceStub`), es findet kein echter

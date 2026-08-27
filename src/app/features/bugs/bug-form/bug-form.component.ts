@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -85,14 +86,17 @@ export class BugFormComponent {
   });
 
   constructor() {
-    // Beim Bearbeiten den bestehenden Datensatz nachladen.
-    effect(() => {
-      const id = this.id();
-      if (id === undefined) {
-        return;
-      }
-      this.loadBug(Number(id));
-    });
+    // Beim Bearbeiten den bestehenden Datensatz nachladen. Bewusst über
+    // `toObservable` statt über `effect`: In einem Effect sind
+    // Schreibzugriffe auf Signale nicht erlaubt (NG0600).
+    toObservable(this.id)
+      .pipe(takeUntilDestroyed())
+      .subscribe((id) => {
+        if (id === undefined) {
+          return;
+        }
+        this.loadBug(Number(id));
+      });
   }
 
   /** Aktuelle Länge der Beschreibung für die Zeichenanzeige. */

@@ -4,6 +4,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MAT_CARD_CONFIG } from '@angular/material/card';
+import { MatPaginatorIntl } from '@angular/material/paginator';
 import { KeycloakService } from 'keycloak-angular';
 
 import { routes } from './app.routes';
@@ -11,6 +12,7 @@ import { environment } from '../environments/environment';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
 import { AuthService } from './core/services/auth.service';
+import { germanPaginatorIntl } from './core/paginator-intl';
 
 /** Nach dieser Zeit gilt Keycloak als nicht erreichbar. */
 const KEYCLOAK_TIMEOUT_MS = 8000;
@@ -92,5 +94,6 @@ export const appConfig: ApplicationConfig = {
       useValue: { appearance: 'outline', subscriptSizing: 'dynamic' },
     },
     { provide: MAT_CARD_CONFIG, useValue: { appearance: 'outlined' } },
+    { provide: MatPaginatorIntl, useFactory: germanPaginatorIntl },
   ],
 };

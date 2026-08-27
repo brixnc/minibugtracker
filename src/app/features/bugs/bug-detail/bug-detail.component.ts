@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, effect, inject, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angular/core';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { DatePipe } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -68,14 +69,19 @@ export class BugDetailComponent {
   protected readonly comments = signal<Comment[]>([]);
 
   constructor() {
-    effect(() => {
-      const id = Number(this.id());
-      if (Number.isNaN(id)) {
-        void this.router.navigate(['/bugs']);
-        return;
-      }
-      this.load(id);
-    });
+    // Auf den Routenparameter reagieren. Bewusst über `toObservable` statt
+    // über `effect`: In einem Effect sind Schreibzugriffe auf Signale
+    // nicht erlaubt (NG0600), und `load()` setzt `loading` und `bug`.
+    toObservable(this.id)
+      .pipe(takeUntilDestroyed())
+      .subscribe((value) => {
+        const id = Number(value);
+        if (Number.isNaN(id)) {
+          void this.router.navigate(['/bugs']);
+          return;
+        }
+        this.load(id);
+      });
   }
 
   /** Nimmt einen neu erfassten Kommentar in die Liste auf. */

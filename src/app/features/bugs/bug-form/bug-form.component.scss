@@ -1,0 +1,37 @@
+.form-page {
+  max-width: 760px;
+}
+
+.back {
+  margin-left: -12px;
+  margin-bottom: 4px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 24px;
+}
+
+.form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+@media (max-width: 620px) {
+  .form__row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 4px;
+  border-top: 1px solid var(--app-border);
+  margin-top: 2px;
+  padding-top: 18px;
+}

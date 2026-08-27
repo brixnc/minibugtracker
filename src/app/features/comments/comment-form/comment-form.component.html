@@ -1,0 +1,47 @@
+<form class="comment-form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <mat-form-field class="comment-form__author">
+    <mat-label>Autor</mat-label>
+    <input
+      matInput
+      formControlName="author"
+      [maxlength]="constraints.authorMaxLength"
+      required
+    />
+    @if (form.controls.author.hasError('required')) {
+      <mat-error>Der Autor ist ein Pflichtfeld.</mat-error>
+    } @else if (form.controls.author.hasError('minlength')) {
+      <mat-error>
+        Mindestens {{ constraints.authorMinLength }} Zeichen erforderlich.
+      </mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field class="comment-form__content">
+    <mat-label>Kommentar</mat-label>
+    <textarea
+      matInput
+      formControlName="content"
+      rows="3"
+      [maxlength]="constraints.contentMaxLength"
+      placeholder="Beobachtung, Zwischenstand oder Lösungsvorschlag"
+      required
+    ></textarea>
+    <mat-hint align="end">
+      {{ contentLength }} / {{ constraints.contentMaxLength }}
+    </mat-hint>
+    @if (form.controls.content.hasError('required')) {
+      <mat-error>Bitte einen Text eingeben.</mat-error>
+    } @else if (form.controls.content.hasError('maxlength')) {
+      <mat-error>
+        Höchstens {{ constraints.contentMaxLength }} Zeichen erlaubt.
+      </mat-error>
+    }
+  </mat-form-field>
+
+  <div class="comment-form__actions">
+    <button mat-flat-button color="primary" type="submit" [disabled]="saving()">
+      <mat-icon>send</mat-icon>
+      Kommentar senden
+    </button>
+  </div>
+</form>

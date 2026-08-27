@@ -1,0 +1,33 @@
+.state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding-top: 92px;
+  text-align: center;
+}
+
+.state__icon {
+  width: 52px;
+  height: 52px;
+  font-size: 52px;
+  opacity: 0.4;
+}
+
+.state__title {
+  margin: 10px 0 0;
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.state__text,
+.state__roles {
+  margin: 0;
+  max-width: 48ch;
+  line-height: 1.6;
+}
+
+.state__roles {
+  font-size: 13px;
+  margin-bottom: 18px;
+}

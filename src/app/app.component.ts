@@ -1,13 +1,20 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
+import { ToolbarComponent } from './shared/components/toolbar/toolbar.component';
+
+/**
+ * Wurzelkomponente: Rahmen aus Kopfzeile, Inhaltsbereich und Fusszeile.
+ */
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, ToolbarComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'minibugtracker-frontend';
+  /** Titel der Anwendung, u. a. für den Test der Wurzelkomponente. */
+  readonly title = 'MiniBugTracker';
 }

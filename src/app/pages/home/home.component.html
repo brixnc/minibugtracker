@@ -1,0 +1,45 @@
+<section class="hero">
+  <div class="hero__inner">
+    <span class="hero__badge">UEK Modul 294</span>
+    <h1 class="hero__title">Fehler melden. Sauber nachverfolgen.</h1>
+    <p class="hero__lead">
+      Das Frontend zum MiniBugTracker-Backend: Projekte, Bugs und Kommentare in einer
+      Oberfläche &ndash; abgesichert mit Keycloak und OAuth&nbsp;2.
+    </p>
+
+    <div class="hero__actions">
+      @if (auth.isAuthenticated()) {
+        <button mat-flat-button color="primary" type="button" (click)="openDashboard()">
+          <mat-icon>dashboard</mat-icon>
+          Zum Dashboard
+        </button>
+        <a mat-stroked-button routerLink="/bugs">
+          <mat-icon>bug_report</mat-icon>
+          Bugs ansehen
+        </a>
+      } @else {
+        <button mat-flat-button color="primary" type="button" (click)="login()">
+          <mat-icon>login</mat-icon>
+          Mit Keycloak anmelden
+        </button>
+      }
+    </div>
+
+    @if (!auth.isAuthenticated()) {
+      <p class="hero__hint app-muted">
+        Es werden ein laufendes Backend auf <code>http://localhost:9090</code> und ein
+        Keycloak-Realm <code>minibugtracker</code> auf <code>http://localhost:8080</code> benötigt.
+      </p>
+    }
+  </div>
+</section>
+
+<section class="features app-page">
+  @for (feature of features; track feature.title) {
+    <article class="feature app-card">
+      <mat-icon class="feature__icon">{{ feature.icon }}</mat-icon>
+      <h2 class="feature__title">{{ feature.title }}</h2>
+      <p class="feature__text app-muted">{{ feature.text }}</p>
+    </article>
+  }
+</section>

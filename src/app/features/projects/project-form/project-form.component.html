@@ -1,0 +1,71 @@
+<div class="app-page form-page">
+  <header class="app-page__header">
+    <div>
+      <a mat-button routerLink="/projekte" class="back">
+        <mat-icon>arrow_back</mat-icon>
+        Zurück zur Übersicht
+      </a>
+      <h1 class="app-page__title">
+        {{ isEdit() ? 'Projekt bearbeiten' : 'Neues Projekt anlegen' }}
+      </h1>
+      <p class="app-page__subtitle">Diese Seite ist der Rolle ADMIN vorbehalten.</p>
+    </div>
+  </header>
+
+  @if (loading()) {
+    <mat-progress-bar mode="indeterminate" aria-label="Projekt wird geladen" />
+  }
+
+  <form class="app-card form" [formGroup]="form" (ngSubmit)="save()" novalidate>
+    <mat-form-field>
+      <mat-label>Projektname</mat-label>
+      <input
+        matInput
+        formControlName="name"
+        [maxlength]="constraints.nameMaxLength"
+        placeholder="z. B. Webshop Relaunch"
+        required
+      />
+      <mat-hint align="end">mindestens {{ constraints.nameMinLength }} Zeichen</mat-hint>
+      @if (form.controls.name.hasError('required')) {
+        <mat-error>Der Projektname ist ein Pflichtfeld.</mat-error>
+      } @else if (form.controls.name.hasError('minlength')) {
+        <mat-error>
+          Der Name braucht mindestens {{ constraints.nameMinLength }} Zeichen.
+        </mat-error>
+      } @else if (form.controls.name.hasError('maxlength')) {
+        <mat-error>
+          Der Name darf höchstens {{ constraints.nameMaxLength }} Zeichen lang sein.
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Beschreibung</mat-label>
+      <textarea
+        matInput
+        formControlName="description"
+        rows="5"
+        [maxlength]="constraints.descriptionMaxLength"
+        placeholder="Worum geht es in diesem Projekt?"
+      ></textarea>
+      <mat-hint align="end">
+        {{ descriptionLength }} / {{ constraints.descriptionMaxLength }}
+      </mat-hint>
+      @if (form.controls.description.hasError('maxlength')) {
+        <mat-error>
+          Die Beschreibung darf höchstens {{ constraints.descriptionMaxLength }} Zeichen
+          lang sein.
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <div class="form__actions">
+      <button mat-button type="button" (click)="cancel()">Abbrechen</button>
+      <button mat-flat-button color="primary" type="submit" [disabled]="saving()">
+        <mat-icon>save</mat-icon>
+        {{ isEdit() ? 'Änderungen speichern' : 'Projekt anlegen' }}
+      </button>
+    </div>
+  </form>
+</div>

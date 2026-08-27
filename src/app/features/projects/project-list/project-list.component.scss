@@ -1,0 +1,66 @@
+.header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.search {
+  width: min(420px, 100%);
+  margin-bottom: 14px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 18px;
+}
+
+.project {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.project__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.project__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--app-surface-muted);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.project__name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.project__date {
+  font-size: 12px;
+}
+
+.project__text {
+  flex: 1 1 auto;
+  margin: 14px 0 16px;
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.project__actions {
+  display: flex;
+  gap: 4px;
+  margin: 0 -8px -8px;
+}

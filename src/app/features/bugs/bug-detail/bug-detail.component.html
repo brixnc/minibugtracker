@@ -1,0 +1,76 @@
+<div class="app-page detail-page">
+  <a mat-button routerLink="/bugs" class="back">
+    <mat-icon>arrow_back</mat-icon>
+    Zurück zur Liste
+  </a>
+
+  @if (loading()) {
+    <mat-progress-bar mode="indeterminate" aria-label="Bug wird geladen" />
+  }
+
+  @if (bug(); as currentBug) {
+    <article class="app-card detail">
+      <header class="detail__head">
+        <div class="detail__heading">
+          <span class="detail__id app-muted">Bug #{{ currentBug.id }}</span>
+          <h1 class="detail__title">{{ currentBug.title }}</h1>
+          <div class="detail__chips">
+            <app-status-chip [status]="currentBug.status" />
+            <app-priority-chip [priority]="currentBug.priority" />
+            @if (currentBug.createdAt) {
+              <span class="app-muted detail__date">
+                gemeldet am {{ currentBug.createdAt | date: 'dd.MM.yyyy \'um\' HH:mm' }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!-- Rollenabhängige Aktionen: nur ADMIN. -->
+        <div class="detail__actions">
+          <a
+            *appHasRole="[roles.ADMIN]"
+            mat-stroked-button
+            [routerLink]="['/bugs', currentBug.id, 'bearbeiten']"
+          >
+            <mat-icon>edit</mat-icon>
+            Bearbeiten
+          </a>
+          <button
+            *appHasRole="[roles.ADMIN]"
+            mat-stroked-button
+            color="warn"
+            type="button"
+            (click)="removeBug()"
+          >
+            <mat-icon>delete_outline</mat-icon>
+            Löschen
+          </button>
+        </div>
+      </header>
+
+      <mat-divider />
+
+      <section class="detail__section">
+        <h2 class="detail__label">Beschreibung</h2>
+        @if (currentBug.description) {
+          <p class="detail__text">{{ currentBug.description }}</p>
+        } @else {
+          <p class="detail__text app-muted">Zu diesem Bug wurde keine Beschreibung erfasst.</p>
+        }
+      </section>
+    </article>
+
+    <section class="app-card detail comments-card">
+      <h2 class="detail__label">
+        Kommentare
+        <span class="count">{{ comments().length }}</span>
+      </h2>
+
+      <app-comment-list [comments]="comments()" (deleted)="onCommentDeleted($event)" />
+
+      <mat-divider class="comments-card__divider" />
+
+      <app-comment-form [bugId]="currentBug.id!" (created)="onCommentCreated($event)" />
+    </section>
+  }
+</div>

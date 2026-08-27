@@ -1,0 +1,117 @@
+.profile-page {
+  max-width: 760px;
+}
+
+.card {
+  padding: 24px;
+}
+
+.card + .card {
+  margin-top: 18px;
+}
+
+.card__title {
+  margin: 0 0 6px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.card__text {
+  margin: 0 0 16px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.card__text code,
+.app-page__subtitle code {
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: var(--app-surface-muted);
+  font-size: 12px;
+}
+
+.card__divider {
+  margin: 20px 0;
+}
+
+.identity {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.identity__avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: var(--app-surface-muted);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+}
+
+.identity__name {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.identity__mail {
+  margin: 3px 0 0;
+  font-size: 13px;
+}
+
+.facts {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+}
+
+.fact__label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.fact__value {
+  margin: 5px 0 0;
+  overflow-wrap: anywhere;
+}
+
+.roles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.role {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--app-surface-muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.result {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--app-closed-bg);
+  color: var(--app-closed-fg);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.result__icon {
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+}

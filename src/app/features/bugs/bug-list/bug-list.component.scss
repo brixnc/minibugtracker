@@ -1,0 +1,63 @@
+.header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+
+.filters__search {
+  flex: 2 1 260px;
+}
+
+.filters__select {
+  flex: 1 1 170px;
+}
+
+.table-card {
+  overflow: hidden;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  background: transparent;
+}
+
+.row {
+  cursor: pointer;
+}
+
+.row:hover {
+  background: var(--app-surface-muted);
+}
+
+.cell-title {
+  display: block;
+  font-weight: 600;
+}
+
+.cell-desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-width: 46ch;
+  font-size: 12px;
+}
+
+.actions {
+  white-space: nowrap;
+  text-align: right;
+}

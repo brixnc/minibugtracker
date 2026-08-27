@@ -1,0 +1,99 @@
+<div class="app-page form-page">
+  <header class="app-page__header">
+    <div>
+      <a mat-button routerLink="/bugs" class="back">
+        <mat-icon>arrow_back</mat-icon>
+        Zurück zur Liste
+      </a>
+      <h1 class="app-page__title">{{ isEdit() ? 'Bug bearbeiten' : 'Neuen Bug melden' }}</h1>
+      <p class="app-page__subtitle">
+        Titel und Beschreibung werden im Frontend genauso geprüft wie im Backend.
+      </p>
+    </div>
+  </header>
+
+  @if (loading()) {
+    <mat-progress-bar mode="indeterminate" aria-label="Bug wird geladen" />
+  }
+
+  <form class="app-card form" [formGroup]="form" (ngSubmit)="save()" novalidate>
+    <mat-form-field>
+      <mat-label>Titel</mat-label>
+      <input
+        matInput
+        formControlName="title"
+        [maxlength]="constraints.titleMaxLength"
+        placeholder="Kurz und präzise, z. B. Login schlägt bei Sonderzeichen fehl"
+        required
+      />
+      <mat-hint align="end">
+        mindestens {{ constraints.titleMinLength }} Zeichen
+      </mat-hint>
+      @if (form.controls.title.hasError('required')) {
+        <mat-error>Der Titel ist ein Pflichtfeld.</mat-error>
+      } @else if (form.controls.title.hasError('minlength')) {
+        <mat-error>
+          Der Titel braucht mindestens {{ constraints.titleMinLength }} Zeichen.
+        </mat-error>
+      } @else if (form.controls.title.hasError('maxlength')) {
+        <mat-error>
+          Der Titel darf höchstens {{ constraints.titleMaxLength }} Zeichen lang sein.
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Beschreibung</mat-label>
+      <textarea
+        matInput
+        formControlName="description"
+        rows="6"
+        [maxlength]="constraints.descriptionMaxLength"
+        placeholder="Was ist passiert? Welche Schritte führen zum Fehler?"
+      ></textarea>
+      <mat-hint align="end">
+        {{ descriptionLength }} / {{ constraints.descriptionMaxLength }}
+      </mat-hint>
+      @if (form.controls.description.hasError('maxlength')) {
+        <mat-error>
+          Die Beschreibung darf höchstens {{ constraints.descriptionMaxLength }} Zeichen
+          lang sein.
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <div class="form__row">
+      <mat-form-field>
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="status" required>
+          @for (status of statusOptions; track status) {
+            <mat-option [value]="status">{{ statusLabels[status] }}</mat-option>
+          }
+        </mat-select>
+        @if (form.controls.status.hasError('required')) {
+          <mat-error>Bitte einen Status wählen.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Priorität</mat-label>
+        <mat-select formControlName="priority" required>
+          @for (priority of priorityOptions; track priority) {
+            <mat-option [value]="priority">{{ priorityLabels[priority] }}</mat-option>
+          }
+        </mat-select>
+        @if (form.controls.priority.hasError('required')) {
+          <mat-error>Bitte eine Priorität wählen.</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="form__actions">
+      <button mat-button type="button" (click)="cancel()">Abbrechen</button>
+      <button mat-flat-button color="primary" type="submit" [disabled]="saving()">
+        <mat-icon>save</mat-icon>
+        {{ isEdit() ? 'Änderungen speichern' : 'Bug erfassen' }}
+      </button>
+    </div>
+  </form>
+</div>

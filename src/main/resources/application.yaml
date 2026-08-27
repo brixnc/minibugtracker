@@ -16,3 +16,9 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8080/realms/minibugtracker
+
+# Freigabe fuer das Angular-Frontend (CORS).
+# Mehrere Origins koennen mit Komma getrennt werden.
+app:
+  cors:
+    allowed-origins: http://localhost:4200

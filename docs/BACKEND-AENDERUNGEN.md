@@ -1,12 +1,18 @@
 # Änderungen am Backend
 
-Für das Frontend war **eine** Ergänzung am Repository
-[brixnc/minibugtracker](https://github.com/brixnc/minibugtracker) nötig:
-eine CORS-Freigabe. Die Fachlogik, das Datenmodell und die Berechtigungen
-bleiben unverändert.
+Am Repository [brixnc/minibugtracker](https://github.com/brixnc/minibugtracker)
+wurden zwei Dinge gemacht. Fachlogik, Datenmodell und Berechtigungen bleiben
+in beiden Fällen unverändert.
 
-Die Änderung liegt im mitgelieferten Backend-Paket auf dem Branch
-`feature/cors-fuer-angular-frontend`.
+| Commit | Inhalt |
+|--------|--------|
+| 1 | **CORS-Freigabe** für das Frontend – ohne sie funktioniert der Produktionsbuild nicht |
+| 2 | **Reparatur der Testsuite** – sie liess sich vorher nicht einmal übersetzen |
+| 3 | `mvnw` als ausführbar markiert |
+
+Alles liegt im mitgelieferten Backend-Paket auf dem Branch
+`feature/cors-fuer-angular-frontend`. Die Commits sind getrennt, Commit 2
+und 3 lassen sich also weglassen, falls nur die CORS-Änderung erwünscht ist.
 
 ---
 
@@ -147,3 +153,46 @@ Access-Control-Allow-Origin: http://localhost:4200
 Access-Control-Allow-Methods: GET,POST,PUT,DELETE,OPTIONS
 Access-Control-Allow-Headers: Authorization, Content-Type, Accept
 ```
+
+
+---
+
+## 7. Reparatur der Testsuite (zweiter Commit)
+
+`mvn test` und `mvn package` schlugen im Ausgangszustand fehl – nicht wegen
+fehlgeschlagener Tests, sondern weil sich die **Test-Quellen nicht
+übersetzen liessen**. Damit war auch kein Jar baubar.
+
+Ursache: `BugControllerTest` und `BugRepositoryTest` waren bereits auf die
+Paketnamen von Spring Boot 4 umgestellt, die Project- und Comment-Pendants
+nicht.
+
+| Datei | Befund | Behebung |
+|-------|--------|----------|
+| `CommentRepositoryTest`, `ProjectRepositoryTest` | `@DataJpaTest` ohne Import; JUnit-Assertions ohne Import | Importe ergänzt (`org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest`) |
+| `ProjectControllerTest`, `CommentControllerTest` | Import `org.junit.jupiter.api.MediaType` – diese Klasse gibt es nicht | auf `org.springframework.http.MediaType` korrigiert |
+| dieselben | `AutoConfigureMockMvc` und die statischen MockMvc-Importe fehlten | ergänzt |
+| `ProjectControllerTest` | Feld `objectMapper` wurde verwendet, war aber nie deklariert | wie in `BugControllerTest` selbst gebaut, mit `JavaTimeModule` für die `LocalDateTime`-Felder |
+| `ProjectControllerTest`, `CommentControllerTest` | `@WithMockUser` lieferte HTTP 401 | auf `jwt()`-Post-Processoren umgestellt – die Anwendung ist ein OAuth2-Resource-Server und verlangt ein Bearer-Token. `BugControllerTest` machte das bereits so |
+
+Zusätzlich neu: **`src/test/resources/application.yaml`**. Die Tests liefen
+vorher gegen die echte PostgreSQL auf `localhost:5432` und brauchten ausserdem
+ein erreichbares Keycloak. Jetzt verwenden sie H2 im Arbeitsspeicher (die
+Abhängigkeit stand bereits ungenutzt im `pom.xml`) und `jwk-set-uri` statt
+`issuer-uri`, damit beim Start kein Netzwerkzugriff nötig ist.
+
+Ergebnis:
+
+```text
+Tests run: 26, Failures: 0, Errors: 0, Skipped: 0
+BUILD SUCCESS
+```
+
+---
+
+## 8. Ausführungsrecht für mvnw (dritter Commit)
+
+`mvnw` war mit Modus `100644` eingecheckt. Unter Linux und macOS scheitert
+`./mvnw` damit an „Permission denied" – der dokumentierte Weg zum Bauen
+funktionierte dort also nicht. Unter Windows fällt es nicht auf, weil dort
+`mvnw.cmd` verwendet wird.

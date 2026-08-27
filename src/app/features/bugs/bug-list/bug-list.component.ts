@@ -143,7 +143,10 @@ export class BugListComponent implements AfterViewInit {
     this.loading.set(true);
     this.bugService.getAll().subscribe({
       next: (bugs) => {
-        this.bugs.set(bugs);
+        // Bewusst eine neue Array-Instanz: Signale vergleichen mit Object.is.
+        // Kaeme zweimal dieselbe Instanz an, wuerde die Aenderung nicht
+        // erkannt und die Tabelle bliebe auf dem alten Stand stehen.
+        this.bugs.set([...bugs]);
         this.applyFilters();
         this.loading.set(false);
       },

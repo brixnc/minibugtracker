@@ -131,9 +131,9 @@ export class DashboardComponent {
       comments: this.commentService.getAll(),
     }).subscribe({
       next: ({ bugs, projects, comments }) => {
-        this.bugs.set(bugs);
-        this.projects.set(projects);
-        this.comments.set(comments);
+        this.bugs.set([...bugs]);
+        this.projects.set([...projects]);
+        this.comments.set([...comments]);
         this.loading.set(false);
       },
       error: () => this.loading.set(false),

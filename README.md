@@ -20,7 +20,7 @@ welche Aktionen sichtbar und erlaubt sind.
 | Angular Material  | 18 mit eigenem Material-3-Theme (hell und dunkel)           |
 | Authentifizierung | `keycloak-angular` 16 / `keycloak-js` 25, OAuth 2 mit PKCE  |
 | Formulare         | Reactive Forms mit Validatoren analog zur Bean Validation des Backends |
-| Tests             | Karma und Jasmine, 31 Tests                                 |
+| Tests             | Karma und Jasmine, 37 Tests                                 |
 | Codestyle         | ESLint mit `angular-eslint` (Konfiguration des Angular-CLI-Demoprojekts) |
 | Schriften         | Roboto und Material Icons als npm-Pakete im Projekt, kein CDN nötig |
 
@@ -219,7 +219,22 @@ Bean Validation des Backends:
 Fehlermeldungen erscheinen feldbezogen als `mat-error`, Textfelder zeigen
 zusätzlich einen Zeichenzähler.
 
-### 5.2 Rollenabhängige Anzeige
+### 5.2 Verhalten auf schmalen Bildschirmen
+
+Die Oberfläche ist bis hinunter zu 360 px Breite bedienbar, ohne dass die
+Seite waagerecht scrollt:
+
+| Breite | Kopfzeile |
+|--------|-----------|
+| ab 860 px | Navigation mit Symbol und Beschriftung |
+| 620–860 px | Navigation nur mit Symbolen |
+| bis 620 px | Navigation im Menü hinter der Schaltfläche mit den drei Strichen |
+| bis 400 px | zusätzlich ohne Markennamen, damit die Bedienelemente Platz haben |
+
+Das Menü blendet den Punkt „Neues Projekt" genauso rollenabhängig aus wie
+die Leiste.
+
+### 5.3 Rollenabhängige Anzeige
 
 Die Direktive `*appHasRole` blendet Bereiche abhängig von der Realm-Rolle
 ein oder aus:
@@ -249,7 +264,7 @@ Backend – ein `403` wird abgefangen und als Meldung angezeigt.
 npm run test:ci
 ```
 
-31 Tests in sechs Dateien:
+37 Tests in sieben Dateien:
 
 | Datei                          | Gegenstand                                                   |
 |--------------------------------|--------------------------------------------------------------|
@@ -259,6 +274,7 @@ npm run test:ci
 | `auth.service.spec.ts`         | Rollenauswertung, Profil-Nachladen, Abmeldezustand            |
 | `app.component.spec.ts`        | Rahmen der Anwendung und Anmelde-Einstieg                     |
 | `paginator-intl.spec.ts`       | Deutsche Beschriftungen des Material-Paginators               |
+| `has-role.directive.spec.ts`   | Rollenabhängige Anzeige, auch beim ersten Rendern und beim Rollenwechsel |
 
 Backend und Keycloak werden dabei durch Testdoubles ersetzt
 (`HttpTestingController`, `KeycloakServiceStub`), es findet kein echter
@@ -293,6 +309,7 @@ Die Aufnahmen zeigen die laufende Anwendung mit Beispieldaten.
 | Projekt-Übersicht | ![Projekte](docs/screenshots/06-projekte.png) |
 | Profil mit Rollen | ![Profil](docs/screenshots/07-profil.png) |
 | Dunkles Design | ![Dunkles Design](docs/screenshots/08-dunkles-design.png) |
+| Handy-Ansicht mit Navigationsmenü | ![Handy](docs/screenshots/09-handy-ansicht.png) |
 
 ---
 
@@ -301,4 +318,4 @@ Die Aufnahmen zeigen die laufende Anwendung mit Beispieldaten.
 | Datei                          | Inhalt                                              |
 |--------------------------------|-----------------------------------------------------|
 | `docs/KEYCLOAK-SETUP.md`       | Realm, Client, Rollen und Testbenutzer einrichten    |
-| `docs/BACKEND-AENDERUNGEN.md`  | Die CORS-Ergänzung im Spring-Boot-Backend           |
+| `docs/BACKEND-AENDERUNGEN.md`  | CORS-Ergänzung und Reparatur der Testsuite im Backend |

@@ -103,9 +103,37 @@
   font-weight: 600;
 }
 
+// Ab 860px die Beschriftungen weglassen, die Symbole bleiben.
 @media (max-width: 860px) {
   .nav__label,
   .account__name {
+    display: none;
+  }
+}
+
+// Der Menue-Knopf ist nur auf schmalen Bildschirmen noetig.
+.nav-menu-button {
+  display: none;
+}
+
+// Unter 620px reicht der Platz auch fuer die Symbole nicht mehr aus.
+// Dann uebernimmt das Menue, und der Markenname weicht.
+@media (max-width: 620px) {
+  .nav {
+    display: none;
+  }
+
+  .nav-menu-button {
+    display: inline-flex;
+  }
+
+  .brand {
+    margin-right: 4px;
+  }
+}
+
+@media (max-width: 400px) {
+  .brand__name {
     display: none;
   }
 }

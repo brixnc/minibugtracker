@@ -5,6 +5,36 @@
   </a>
 
   @if (auth.isAuthenticated()) {
+    <!-- Schmale Bildschirme: Navigation im Menue, damit sie nicht abgeschnitten wird. -->
+    <button
+      mat-icon-button
+      type="button"
+      class="nav-menu-button"
+      aria-label="Navigation öffnen"
+      [matMenuTriggerFor]="navMenu"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <mat-menu #navMenu="matMenu">
+      <a mat-menu-item routerLink="/dashboard">
+        <mat-icon>dashboard</mat-icon>
+        <span>Dashboard</span>
+      </a>
+      <a mat-menu-item routerLink="/bugs">
+        <mat-icon>bug_report</mat-icon>
+        <span>Bugs</span>
+      </a>
+      <a mat-menu-item routerLink="/projekte">
+        <mat-icon>folder</mat-icon>
+        <span>Projekte</span>
+      </a>
+      <a *appHasRole="[roles.ADMIN]" mat-menu-item routerLink="/projekte/neu">
+        <mat-icon>create_new_folder</mat-icon>
+        <span>Neues Projekt</span>
+      </a>
+    </mat-menu>
+
     <nav class="nav" aria-label="Hauptnavigation">
       <a
         mat-button

@@ -89,7 +89,9 @@ export class ProjectListComponent {
     this.loading.set(true);
     this.projectService.getAll().subscribe({
       next: (projects) => {
-        this.projects.set(projects);
+        // Neue Array-Instanz, damit die Signal-Aenderung sicher erkannt wird
+        // (Signale vergleichen mit Object.is).
+        this.projects.set([...projects]);
         this.loading.set(false);
       },
       error: () => this.loading.set(false),

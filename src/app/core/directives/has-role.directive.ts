@@ -28,14 +28,23 @@ export class HasRoleDirective {
   private readonly viewContainer = inject(ViewContainerRef);
   private readonly auth = inject(AuthService);
 
-  /** Die Rollen, von denen mindestens eine vorhanden sein muss. */
-  readonly appHasRole = input.required<string[]>();
+  /**
+   * Die Rollen, von denen mindestens eine vorhanden sein muss.
+   *
+   * Bewusst nicht `input.required`: Der Effect unten laeuft bereits beim
+   * ersten Durchlauf der Aenderungserkennung, und zu diesem Zeitpunkt hat
+   * Angular den Wert noch nicht gesetzt. Ein `required`-Input wirft dann
+   * NG0950. Solange kein Wert vorliegt, wird nichts angezeigt - im Zweifel
+   * also verbergen statt preisgeben.
+   */
+  readonly appHasRole = input<string[] | undefined>(undefined);
 
   private rendered = false;
 
   constructor() {
     effect(() => {
-      const allowed = this.auth.hasAnyRole(this.appHasRole());
+      const required = this.appHasRole();
+      const allowed = required !== undefined && this.auth.hasAnyRole(required);
 
       if (allowed && !this.rendered) {
         this.viewContainer.createEmbeddedView(this.templateRef);

@@ -1,0 +1,39 @@
+# ---------------------------------------------------------------------------
+# Konfiguration ausschliesslich fuer die Tests.
+#
+# Diese Datei liegt im Test-Klassenpfad und hat dadurch Vorrang vor
+# src/main/resources/application.yaml. Sie sorgt dafuer, dass die Tests
+# ohne laufende PostgreSQL und ohne laufendes Keycloak durchlaufen.
+# ---------------------------------------------------------------------------
+
+spring:
+  datasource:
+    # H2 im Arbeitsspeicher, im PostgreSQL-Modus, damit sich die Datenbank
+    # moeglichst gleich verhaelt wie im Betrieb. Die Abhaengigkeit steht
+    # bereits im pom.xml (Scope test).
+    url: jdbc:h2:mem:minibugtracker;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: false
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # Bewusst jwk-set-uri statt issuer-uri: Bei issuer-uri fragt Spring
+          # den Server schon beim Start ab, was ohne laufendes Keycloak
+          # fehlschlaegt. jwk-set-uri wird erst beim ersten echten Token
+          # ausgewertet - in den Tests also nie.
+          jwk-set-uri: http://localhost:8080/realms/minibugtracker/protocol/openid-connect/certs
+
+# Gleiche CORS-Freigabe wie im Betrieb, damit die Konfiguration auch im
+# Test geladen wird.
+app:
+  cors:
+    allowed-origins: http://localhost:4200

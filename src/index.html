@@ -1,15 +1,78 @@
 <!doctype html>
 <html lang="de">
-<head>
-  <meta charset="utf-8">
-  <title>MiniBugTracker</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-</head>
-<body class="mat-typography">
-  <app-root></app-root>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <title>MiniBugTracker</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Frontend zum MiniBugTracker: Projekte, Bugs und Kommentare, abgesichert mit Keycloak."
+    />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+    <!--
+      Roboto und die Material Icons liegen als npm-Pakete im Projekt
+      (@fontsource/roboto und material-icons) und werden ueber angular.json
+      eingebunden. Dadurch laeuft die Anwendung auch ohne Internetzugang.
+    -->
+
+    <style>
+      /* Startanzeige, solange Angular bootet und Keycloak die Sitzung prueft. */
+      .app-splash {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        min-height: 100vh;
+        background: #f6f5fb;
+        color: #5c5675;
+        font-family: Roboto, 'Helvetica Neue', Arial, sans-serif;
+      }
+
+      .app-splash__ring {
+        width: 34px;
+        height: 34px;
+        border: 3px solid rgba(109, 74, 255, 0.22);
+        border-top-color: #6d4aff;
+        border-radius: 50%;
+        animation: app-splash-spin 0.9s linear infinite;
+      }
+
+      .app-splash__text {
+        margin: 0;
+        font-size: 14px;
+        letter-spacing: 0.2px;
+      }
+
+      @keyframes app-splash-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .app-splash__ring {
+          animation-duration: 3s;
+        }
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .app-splash {
+          background: #131022;
+          color: #a9a2c4;
+        }
+      }
+    </style>
+  </head>
+  <body class="mat-typography">
+    <app-root>
+      <!-- Wird von Angular ersetzt, sobald die Anwendung bereit ist. -->
+      <div class="app-splash">
+        <div class="app-splash__ring"></div>
+        <p class="app-splash__text">MiniBugTracker wird gestartet …</p>
+      </div>
+    </app-root>
+  </body>
 </html>

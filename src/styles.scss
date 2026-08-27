@@ -1,1 +1,209 @@
-/* You can add global styles to this file, and also import other style files */
+// ---------------------------------------------------------------------------
+// Globales Theming des MiniBugTracker-Frontends
+//
+// Angular Material 18 wird mit einem eigenen Material-3-Theme betrieben
+// (Violett als Primaerfarbe, Cyan als Tertiaerfarbe). Zusätzlich definiert
+// diese Datei semantische Farb-Tokens für Status und Priorität, damit die
+// Oberfläche in hell und dunkel gleich lesbar bleibt.
+// ---------------------------------------------------------------------------
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$app-light-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: mat.$violet-palette,
+      tertiary: mat.$cyan-palette,
+    ),
+    density: (
+      scale: -1,
+    ),
+  )
+);
+
+$app-dark-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: dark,
+      primary: mat.$violet-palette,
+      tertiary: mat.$cyan-palette,
+    ),
+    density: (
+      scale: -1,
+    ),
+  )
+);
+
+:root {
+  @include mat.all-component-themes($app-light-theme);
+
+  // Semantische Tokens - hell
+  --app-page-bg: #f6f5fb;
+  --app-surface: #ffffff;
+  --app-surface-muted: #f0eef8;
+  --app-border: rgba(23, 16, 46, 0.1);
+  --app-text: #1b1533;
+  --app-text-muted: #5c5675;
+  --app-shadow: 0 1px 2px rgba(23, 16, 46, 0.06), 0 8px 24px rgba(23, 16, 46, 0.06);
+
+  --app-open-fg: #8a4b00;
+  --app-open-bg: #ffedd5;
+  --app-progress-fg: #1d4ed8;
+  --app-progress-bg: #dbeafe;
+  --app-closed-fg: #166534;
+  --app-closed-bg: #dcfce7;
+
+  --app-high-fg: #b3261e;
+  --app-high-bg: #ffe4e0;
+  --app-medium-fg: #8a4b00;
+  --app-medium-bg: #fff0d6;
+  --app-low-fg: #3f4a5a;
+  --app-low-bg: #e8ecf3;
+}
+
+.app-dark {
+  @include mat.all-component-colors($app-dark-theme);
+
+  // Semantische Tokens - dunkel
+  --app-page-bg: #131022;
+  --app-surface: #1c1832;
+  --app-surface-muted: #241f3d;
+  --app-border: rgba(255, 255, 255, 0.12);
+  --app-text: #ece8f7;
+  --app-text-muted: #a9a2c4;
+  --app-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
+
+  --app-open-fg: #fdba74;
+  --app-open-bg: rgba(251, 146, 60, 0.16);
+  --app-progress-fg: #93c5fd;
+  --app-progress-bg: rgba(59, 130, 246, 0.18);
+  --app-closed-fg: #86efac;
+  --app-closed-bg: rgba(34, 197, 94, 0.16);
+
+  --app-high-fg: #fca5a5;
+  --app-high-bg: rgba(239, 68, 68, 0.18);
+  --app-medium-fg: #fcd34d;
+  --app-medium-bg: rgba(245, 158, 11, 0.16);
+  --app-low-fg: #cbd5e1;
+  --app-low-bg: rgba(148, 163, 184, 0.16);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--app-page-bg);
+  color: var(--app-text);
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  transition: background-color 200ms ease;
+}
+
+// --- Wiederverwendbare Layout-Bausteine -----------------------------------
+
+.app-page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 24px 64px;
+}
+
+.app-page__header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.app-page__title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+}
+
+.app-page__subtitle {
+  margin: 6px 0 0;
+  color: var(--app-text-muted);
+  font-size: 14px;
+}
+
+.app-card {
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: 16px;
+  box-shadow: var(--app-shadow);
+}
+
+.app-muted {
+  color: var(--app-text-muted);
+}
+
+.app-spacer {
+  flex: 1 1 auto;
+}
+
+// --- Chips für Status und Priorität -------------------------------------
+
+.app-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+
+.app-chip__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentcolor;
+}
+
+.app-chip--open {
+  color: var(--app-open-fg);
+  background: var(--app-open-bg);
+}
+.app-chip--in-progress {
+  color: var(--app-progress-fg);
+  background: var(--app-progress-bg);
+}
+.app-chip--closed {
+  color: var(--app-closed-fg);
+  background: var(--app-closed-bg);
+}
+.app-chip--high {
+  color: var(--app-high-fg);
+  background: var(--app-high-bg);
+}
+.app-chip--medium {
+  color: var(--app-medium-fg);
+  background: var(--app-medium-bg);
+}
+.app-chip--low {
+  color: var(--app-low-fg);
+  background: var(--app-low-bg);
+}
+
+// --- Snackbar-Varianten ---------------------------------------------------
+
+.app-snackbar--success {
+  --mdc-snackbar-container-color: #166534;
+  --mdc-snackbar-supporting-text-color: #ffffff;
+  --mat-snack-bar-button-color: #bbf7d0;
+}
+
+.app-snackbar--error {
+  --mdc-snackbar-container-color: #b3261e;
+  --mdc-snackbar-supporting-text-color: #ffffff;
+  --mat-snack-bar-button-color: #ffd7d2;
+}

@@ -1,0 +1,93 @@
+<mat-toolbar class="toolbar">
+  <a class="brand" routerLink="/" aria-label="Zur Startseite">
+    <mat-icon class="brand__icon">bug_report</mat-icon>
+    <span class="brand__name">MiniBugTracker</span>
+  </a>
+
+  @if (auth.isAuthenticated()) {
+    <nav class="nav" aria-label="Hauptnavigation">
+      <a
+        mat-button
+        routerLink="/dashboard"
+        routerLinkActive="nav__link--active"
+        class="nav__link"
+      >
+        <mat-icon>dashboard</mat-icon>
+        <span class="nav__label">Dashboard</span>
+      </a>
+      <a mat-button routerLink="/bugs" routerLinkActive="nav__link--active" class="nav__link">
+        <mat-icon>bug_report</mat-icon>
+        <span class="nav__label">Bugs</span>
+      </a>
+      <a mat-button routerLink="/projekte" routerLinkActive="nav__link--active" class="nav__link">
+        <mat-icon>folder</mat-icon>
+        <span class="nav__label">Projekte</span>
+      </a>
+
+      <!-- Rollenabhängige Anzeige: nur ADMIN darf Projekte anlegen. -->
+      <a
+        *appHasRole="[roles.ADMIN]"
+        mat-button
+        routerLink="/projekte/neu"
+        routerLinkActive="nav__link--active"
+        class="nav__link"
+      >
+        <mat-icon>create_new_folder</mat-icon>
+        <span class="nav__label">Neues Projekt</span>
+      </a>
+    </nav>
+  }
+
+  <span class="app-spacer"></span>
+
+  <button
+    mat-icon-button
+    type="button"
+    [matTooltip]="isDark() ? 'Helles Design' : 'Dunkles Design'"
+    [attr.aria-label]="isDark() ? 'Helles Design aktivieren' : 'Dunkles Design aktivieren'"
+    (click)="toggleTheme()"
+  >
+    <mat-icon>{{ isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+  </button>
+
+  @if (auth.isAuthenticated()) {
+    <button
+      mat-button
+      type="button"
+      class="account"
+      [matMenuTriggerFor]="accountMenu"
+      aria-label="Benutzermenü öffnen"
+    >
+      <span class="avatar" aria-hidden="true">{{ auth.initials() }}</span>
+      <span class="account__name">{{ auth.displayName() }}</span>
+      <mat-icon class="account__caret">expand_more</mat-icon>
+    </button>
+
+    <mat-menu #accountMenu="matMenu" xPosition="before">
+      <div class="menu-head">
+        <p class="menu-head__name">{{ auth.displayName() }}</p>
+        <p class="menu-head__roles">
+          @for (role of auth.roles(); track role) {
+            <span class="menu-head__role">{{ role }}</span>
+          } @empty {
+            <span class="menu-head__role">Keine Rolle zugewiesen</span>
+          }
+        </p>
+      </div>
+      <mat-divider />
+      <a mat-menu-item routerLink="/profil">
+        <mat-icon>account_circle</mat-icon>
+        <span>Mein Profil</span>
+      </a>
+      <button mat-menu-item type="button" (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Abmelden</span>
+      </button>
+    </mat-menu>
+  } @else {
+    <button mat-flat-button color="primary" type="button" (click)="login()">
+      <mat-icon>login</mat-icon>
+      Anmelden
+    </button>
+  }
+</mat-toolbar>

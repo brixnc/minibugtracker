@@ -7,6 +7,29 @@ Client.
 
 ---
 
+## 0. Schnellweg: Realm einfach importieren
+
+Im Gesamtpaket liegen `docker-compose.yml` und
+`keycloak/minibugtracker-realm.json`. Der Befehl
+
+```bash
+docker compose up -d
+```
+
+startet Keycloak und importiert dabei Realm, Client, die Rollen `USER` und
+`ADMIN` sowie zwei Testbenutzer:
+
+| Benutzer | Passwort | Rollen |
+|----------|----------|--------|
+| `testadmin` | `admin123` | ADMIN, USER |
+| `testuser` | `user123` | USER |
+
+Wer das nutzt, kann die Abschnitte 2 bis 5 überspringen und direkt bei
+Abschnitt 6 („Prüfen") weiterlesen. Die Handarbeit unten bleibt für den
+Betrieb ohne Docker und als Nachschlagewerk stehen.
+
+---
+
 ## 1. Keycloak starten
 
 ```bash

@@ -28,6 +28,12 @@ welche Aktionen sichtbar und erlaubt sind.
 
 ## 2. Schnellstart
 
+> **Schnellweg:** Im Gesamtpaket liegt eine `docker-compose.yml`, die
+> PostgreSQL und einen fertig eingerichteten Keycloak-Realm startet.
+> Ein `docker compose up -d` ersetzt dann die Handarbeit aus
+> `docs/KEYCLOAK-SETUP.md`. Die Anleitung dort bleibt als Nachschlagewerk
+> und für den Betrieb ohne Docker.
+
 ### 2.1 Voraussetzungen
 
 | Dienst                | Adresse                 | Bemerkung                                     |

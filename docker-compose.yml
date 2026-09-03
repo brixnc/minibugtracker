@@ -1,0 +1,58 @@
+# ---------------------------------------------------------------------------
+# Startet die beiden Dienste, die der MiniBugTracker braucht:
+#   - PostgreSQL   auf localhost:5432  (Datenbank bugtracker_db)
+#   - Keycloak     auf localhost:8080  (Realm minibugtracker, fertig eingerichtet)
+#
+# Aufruf:   docker compose up -d
+# Stoppen:  docker compose down
+# Alles zuruecksetzen (inkl. Daten):  docker compose down -v
+# ---------------------------------------------------------------------------
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: minibugtracker-db
+    restart: unless-stopped
+    environment:
+      # Diese Werte stehen genauso in src/main/resources/application.yaml
+      # des Backends. Wer sie hier aendert, muss sie dort mitziehen.
+      POSTGRES_DB: "bugtracker_db"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "Colloccollo123#"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-daten:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d bugtracker_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0
+    container_name: minibugtracker-keycloak
+    restart: unless-stopped
+    # --import-realm liest beim Start alle Dateien aus /opt/keycloak/data/import
+    # ein. Dadurch sind Realm, Client, Rollen und Testbenutzer sofort da.
+    command: ["start-dev", "--import-realm"]
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: "admin"
+      KC_BOOTSTRAP_ADMIN_PASSWORD: "admin"
+      # Aeltere Keycloak-Versionen lesen diese beiden Namen:
+      KEYCLOAK_ADMIN: "admin"
+      KEYCLOAK_ADMIN_PASSWORD: "admin"
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import:ro
+    healthcheck:
+      test:
+        ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/8080 && echo -e 'GET /realms/minibugtracker HTTP/1.1\\nHost: localhost\\nConnection: close\\n\\n' >&3 && cat <&3 | head -1 | grep -q '200'"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 40s
+
+volumes:
+  postgres-daten:

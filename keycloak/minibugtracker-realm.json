@@ -1,0 +1,98 @@
+{
+  "realm": "minibugtracker",
+  "displayName": "MiniBugTracker",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": false,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": false,
+  "accessTokenLifespan": 900,
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 36000,
+
+  "roles": {
+    "realm": [
+      {
+        "name": "USER",
+        "description": "Darf lesen und Bugs sowie Kommentare erfassen."
+      },
+      {
+        "name": "ADMIN",
+        "description": "Darf zusaetzlich aendern und loeschen sowie Projekte anlegen."
+      }
+    ]
+  },
+
+  "clients": [
+    {
+      "clientId": "minibugtracker-frontend",
+      "name": "MiniBugTracker Frontend",
+      "description": "Angular-Single-Page-Anwendung. Oeffentlicher Client mit PKCE.",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "bearerOnly": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false,
+      "rootUrl": "http://localhost:4300",
+      "baseUrl": "http://localhost:4300",
+      "adminUrl": "http://localhost:4300",
+      "redirectUris": [
+        "http://localhost:4300/*"
+      ],
+      "webOrigins": [
+        "http://localhost:4300"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:4300/*"
+      },
+      "fullScopeAllowed": true
+    }
+  ],
+
+  "users": [
+    {
+      "username": "testadmin",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Test",
+      "lastName": "Admin",
+      "email": "testadmin@example.ch",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "admin123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "ADMIN",
+        "USER"
+      ]
+    },
+    {
+      "username": "testuser",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "testuser@example.ch",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "user123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "USER"
+      ]
+    }
+  ]
+}

@@ -36,7 +36,7 @@ export function storageFactory(): OAuthStorage {
  *
  * Im Demoprojekt (Angular 21) steht dafür
  * `provideEnvironmentInitializer(() => inject(AppAuthService).initAuth())`.
- * Dieses Projekt läuft auf Angular 18, wo es diese Kurzform noch nicht
+ * Dieses Projekt läuft auf Angular 19, wo es diese Kurzform noch nicht
  * gibt - `APP_INITIALIZER` bewirkt dasselbe.
  */
 function initializeAuth(auth: AppAuthService) {

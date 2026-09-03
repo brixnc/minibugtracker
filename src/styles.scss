@@ -1,8 +1,8 @@
 // ---------------------------------------------------------------------------
 // Globales Theming des MiniBugTracker-Frontends
 //
-// Angular Material 18 wird mit einem eigenen Material-3-Theme betrieben
-// (Violett als Primaerfarbe, Cyan als Tertiaerfarbe). Zusätzlich definiert
+// Angular Material 19 wird mit einem eigenen Material-3-Theme betrieben
+// (Schieferblau als Primaerfarbe, Amber als Tertiaerfarbe). Zusätzlich definiert
 // diese Datei semantische Farb-Tokens für Status und Priorität, damit die
 // Oberfläche in hell und dunkel gleich lesbar bleibt.
 // ---------------------------------------------------------------------------
@@ -15,8 +15,8 @@ $app-light-theme: mat.define-theme(
   (
     color: (
       theme-type: light,
-      primary: mat.$violet-palette,
-      tertiary: mat.$cyan-palette,
+      primary: mat.$blue-palette,
+      tertiary: mat.$orange-palette,
     ),
     density: (
       scale: -1,
@@ -28,8 +28,8 @@ $app-dark-theme: mat.define-theme(
   (
     color: (
       theme-type: dark,
-      primary: mat.$violet-palette,
-      tertiary: mat.$cyan-palette,
+      primary: mat.$blue-palette,
+      tertiary: mat.$orange-palette,
     ),
     density: (
       scale: -1,
@@ -40,14 +40,20 @@ $app-dark-theme: mat.define-theme(
 :root {
   @include mat.all-component-themes($app-light-theme);
 
+  --mat-sys-primary: #315a7d;
+  --mat-sys-on-primary: #ffffff;
+  --mdc-filled-button-container-color: #315a7d;
+  --mdc-filled-button-label-text-color: #ffffff;
+  --mdc-text-button-label-text-color: #315a7d;
+
   // Semantische Tokens - hell
-  --app-page-bg: #f6f5fb;
+  --app-page-bg: #f4f6f8;
   --app-surface: #ffffff;
-  --app-surface-muted: #f0eef8;
-  --app-border: rgba(23, 16, 46, 0.1);
-  --app-text: #1b1533;
-  --app-text-muted: #5c5675;
-  --app-shadow: 0 1px 2px rgba(23, 16, 46, 0.06), 0 8px 24px rgba(23, 16, 46, 0.06);
+  --app-surface-muted: #e9edf1;
+  --app-border: rgba(28, 39, 51, 0.12);
+  --app-text: #1c2733;
+  --app-text-muted: #5d6875;
+  --app-shadow: 0 1px 2px rgba(28, 39, 51, 0.06), 0 8px 24px rgba(28, 39, 51, 0.06);
 
   --app-open-fg: #8a4b00;
   --app-open-bg: #ffedd5;
@@ -58,8 +64,8 @@ $app-dark-theme: mat.define-theme(
 
   --app-high-fg: #b3261e;
   --app-high-bg: #ffe4e0;
-  --app-medium-fg: #8a4b00;
-  --app-medium-bg: #fff0d6;
+  --app-medium-fg: #8a5200;
+  --app-medium-bg: #fff1d6;
   --app-low-fg: #3f4a5a;
   --app-low-bg: #e8ecf3;
 }
@@ -67,13 +73,19 @@ $app-dark-theme: mat.define-theme(
 .app-dark {
   @include mat.all-component-colors($app-dark-theme);
 
+  --mat-sys-primary: #8fb3cf;
+  --mat-sys-on-primary: #102a3d;
+  --mdc-filled-button-container-color: #8fb3cf;
+  --mdc-filled-button-label-text-color: #102a3d;
+  --mdc-text-button-label-text-color: #8fb3cf;
+
   // Semantische Tokens - dunkel
-  --app-page-bg: #131022;
-  --app-surface: #1c1832;
-  --app-surface-muted: #241f3d;
+  --app-page-bg: #14191f;
+  --app-surface: #1d252d;
+  --app-surface-muted: #26313b;
   --app-border: rgba(255, 255, 255, 0.12);
-  --app-text: #ece8f7;
-  --app-text-muted: #a9a2c4;
+  --app-text: #e8edf2;
+  --app-text-muted: #aeb9c4;
   --app-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
 
   --app-open-fg: #fdba74;
@@ -85,10 +97,28 @@ $app-dark-theme: mat.define-theme(
 
   --app-high-fg: #fca5a5;
   --app-high-bg: rgba(239, 68, 68, 0.18);
-  --app-medium-fg: #fcd34d;
+  --app-medium-fg: #f6c86e;
   --app-medium-bg: rgba(245, 158, 11, 0.16);
   --app-low-fg: #cbd5e1;
   --app-low-bg: rgba(148, 163, 184, 0.16);
+}
+
+.mat-mdc-unelevated-button.mat-primary {
+  --mdc-filled-button-container-color: #315a7d;
+  --mdc-filled-button-label-text-color: #ffffff;
+}
+
+.mat-mdc-button.mat-primary {
+  --mdc-text-button-label-text-color: #315a7d;
+}
+
+.app-dark .mat-mdc-unelevated-button.mat-primary {
+  --mdc-filled-button-container-color: #8fb3cf;
+  --mdc-filled-button-label-text-color: #102a3d;
+}
+
+.app-dark .mat-mdc-button.mat-primary {
+  --mdc-text-button-label-text-color: #8fb3cf;
 }
 
 html,

@@ -18,12 +18,11 @@ import { COMMENT_CONSTRAINTS, Comment } from '../../data/comment';
  * 2 bis 100 Zeichen.
  */
 @Component({
-  selector: 'app-comment-form',
-  standalone: true,
-  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './comment-form.component.html',
-  styleUrl: './comment-form.component.scss',
+    selector: 'app-comment-form',
+    imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: './comment-form.component.html',
+    styleUrl: './comment-form.component.scss'
 })
 export class CommentFormComponent {
   private readonly formBuilder = inject(FormBuilder);

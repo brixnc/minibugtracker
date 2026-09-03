@@ -6,11 +6,10 @@ import { MatIconModule } from '@angular/material/icon';
  * nicht wie ein Ladefehler aussieht.
  */
 @Component({
-  selector: 'app-empty-state',
-  standalone: true,
-  imports: [MatIconModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: 'app-empty-state',
+    imports: [MatIconModule],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <div class="empty">
       <mat-icon class="empty__icon">{{ icon() }}</mat-icon>
       <p class="empty__title">{{ title() }}</p>
@@ -20,8 +19,8 @@ import { MatIconModule } from '@angular/material/icon';
       <ng-content />
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .empty {
         display: flex;
         flex-direction: column;
@@ -51,7 +50,7 @@ import { MatIconModule } from '@angular/material/icon';
         max-width: 46ch;
       }
     `,
-  ],
+    ]
 })
 export class EmptyStateComponent {
   /** Material-Icon oberhalb des Textes. */

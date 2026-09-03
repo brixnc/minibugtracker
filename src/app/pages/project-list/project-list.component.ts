@@ -31,24 +31,23 @@ import {
  * mit `@PreAuthorize("hasRole('ADMIN')")`.
  */
 @Component({
-  selector: 'app-project-list',
-  standalone: true,
-  imports: [
-    DatePipe,
-    FormsModule,
-    RouterLink,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatProgressBarModule,
-    MatTooltipModule,
-    AppIsInRolesDirective,
-    EmptyStateComponent,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './project-list.component.html',
-  styleUrl: './project-list.component.scss',
+    selector: 'app-project-list',
+    imports: [
+        DatePipe,
+        FormsModule,
+        RouterLink,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatProgressBarModule,
+        MatTooltipModule,
+        AppIsInRolesDirective,
+        EmptyStateComponent,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: './project-list.component.html',
+    styleUrl: './project-list.component.scss'
 })
 export class ProjectListComponent {
   private readonly projectService = inject(ProjectService);

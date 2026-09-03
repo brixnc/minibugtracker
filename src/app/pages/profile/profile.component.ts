@@ -17,12 +17,11 @@ import { AppIsInRolesDirective } from '../../directives/app-is-in-role.dir';
  * nicht nur in der Oberfläche, sondern auch serverseitig greift.
  */
 @Component({
-  selector: 'app-profile',
-  standalone: true,
-  imports: [MatButtonModule, MatDividerModule, MatIconModule, AppIsInRolesDirective],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './profile.component.html',
-  styleUrl: './profile.component.scss',
+    selector: 'app-profile',
+    imports: [MatButtonModule, MatDividerModule, MatIconModule, AppIsInRolesDirective],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: './profile.component.html',
+    styleUrl: './profile.component.scss'
 })
 export class ProfileComponent {
   private readonly userService = inject(UserService);

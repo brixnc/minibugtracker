@@ -21,20 +21,19 @@ import { PROJECT_CONSTRAINTS, ProjectPayload } from '../../data/project';
  *  - Beschreibung: höchstens 300 Zeichen
  */
 @Component({
-  selector: 'app-project-form',
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    RouterLink,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatProgressBarModule,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './project-form.component.html',
-  styleUrl: './project-form.component.scss',
+    selector: 'app-project-form',
+    imports: [
+        ReactiveFormsModule,
+        RouterLink,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatProgressBarModule,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: './project-form.component.html',
+    styleUrl: './project-form.component.scss'
 })
 export class ProjectFormComponent {
   private readonly formBuilder = inject(FormBuilder);

@@ -28,23 +28,22 @@ import { AppIsInRolesDirective } from '../../directives/app-is-in-role.dir';
  * die Rolle ADMIN (rollenabhängige Anzeige).
  */
 @Component({
-  selector: 'app-dashboard',
-  standalone: true,
-  imports: [
-    DatePipe,
-    RouterLink,
-    MatButtonModule,
-    MatIconModule,
-    MatProgressBarModule,
-    MatTooltipModule,
-    StatusChipComponent,
-    PriorityChipComponent,
-    EmptyStateComponent,
-    AppIsInRolesDirective,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss',
+    selector: 'app-dashboard',
+    imports: [
+        DatePipe,
+        RouterLink,
+        MatButtonModule,
+        MatIconModule,
+        MatProgressBarModule,
+        MatTooltipModule,
+        StatusChipComponent,
+        PriorityChipComponent,
+        EmptyStateComponent,
+        AppIsInRolesDirective,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: './dashboard.component.html',
+    styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent {
   private readonly bugService = inject(BugService);

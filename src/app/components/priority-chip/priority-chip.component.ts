@@ -7,18 +7,17 @@ import { BUG_PRIORITY_LABELS, BugPriority } from '../../data/bug';
  * Farbige Kennzeichnung der Bug-Priorität (LOW / MEDIUM / HIGH).
  */
 @Component({
-  selector: 'app-priority-chip',
-  standalone: true,
-  imports: [MatIconModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: 'app-priority-chip',
+    imports: [MatIconModule],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <span class="app-chip" [class]="cssClass()">
       <mat-icon class="icon">{{ icon() }}</mat-icon>
       {{ label() }}
     </span>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .icon {
         width: 15px;
         height: 15px;
@@ -26,7 +25,7 @@ import { BUG_PRIORITY_LABELS, BugPriority } from '../../data/bug';
         line-height: 15px;
       }
     `,
-  ],
+    ]
 })
 export class PriorityChipComponent {
   /** Die darzustellende Priorität. */

@@ -13,12 +13,11 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
  * jeweilige Seite hängt (Kapitel «Routing» des ÜK).
  */
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet, ToolbarComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
+    selector: 'app-root',
+    imports: [RouterOutlet, ToolbarComponent],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss'
 })
 export class AppComponent {
   private readonly auth = inject(AppAuthService);

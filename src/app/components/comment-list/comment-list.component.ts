@@ -24,19 +24,18 @@ import {
  * sichtbar, weil `DELETE /api/comments/{id}` serverseitig ADMIN verlangt.
  */
 @Component({
-  selector: 'app-comment-list',
-  standalone: true,
-  imports: [
-    DatePipe,
-    MatButtonModule,
-    MatIconModule,
-    MatTooltipModule,
-    AppIsInRolesDirective,
-    EmptyStateComponent,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './comment-list.component.html',
-  styleUrl: './comment-list.component.scss',
+    selector: 'app-comment-list',
+    imports: [
+        DatePipe,
+        MatButtonModule,
+        MatIconModule,
+        MatTooltipModule,
+        AppIsInRolesDirective,
+        EmptyStateComponent,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: './comment-list.component.html',
+    styleUrl: './comment-list.component.scss'
 })
 export class CommentListComponent {
   private readonly commentService = inject(CommentService);

@@ -33,21 +33,20 @@ import {
  *  - Status und Priorität: Pflichtfelder aus der jeweiligen Auswahl
  */
 @Component({
-  selector: 'app-bug-form',
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    RouterLink,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatProgressBarModule,
-    MatSelectModule,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './bug-form.component.html',
-  styleUrl: './bug-form.component.scss',
+    selector: 'app-bug-form',
+    imports: [
+        ReactiveFormsModule,
+        RouterLink,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatProgressBarModule,
+        MatSelectModule,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: './bug-form.component.html',
+    styleUrl: './bug-form.component.scss'
 })
 export class BugFormComponent {
   private readonly formBuilder = inject(FormBuilder);

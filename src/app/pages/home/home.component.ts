@@ -12,12 +12,11 @@ import { AppAuthService } from '../../service/app.auth.service';
  * Keycloak kehrt nach dem Abmelden hierher zurueck.
  */
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [MatButtonModule, MatIconModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
+    selector: 'app-home',
+    imports: [MatButtonModule, MatIconModule],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: './home.component.html',
+    styleUrl: './home.component.scss'
 })
 export class HomeComponent {
   private readonly auth = inject(AppAuthService);

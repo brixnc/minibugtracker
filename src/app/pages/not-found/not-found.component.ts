@@ -5,11 +5,10 @@ import { MatIconModule } from '@angular/material/icon';
 
 /** Auffangroute für unbekannte URLs. */
 @Component({
-  selector: 'app-not-found',
-  standalone: true,
-  imports: [RouterLink, MatButtonModule, MatIconModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: 'app-not-found',
+    imports: [RouterLink, MatButtonModule, MatIconModule],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <div class="app-page state">
       <mat-icon class="state__icon">travel_explore</mat-icon>
       <h1 class="state__title">Seite nicht gefunden</h1>
@@ -22,6 +21,6 @@ import { MatIconModule } from '@angular/material/icon';
       </a>
     </div>
   `,
-  styleUrl: '../no-access/state.scss',
+    styleUrl: '../no-access/state.scss'
 })
 export class NotFoundComponent {}

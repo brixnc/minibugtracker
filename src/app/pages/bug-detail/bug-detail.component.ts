@@ -33,25 +33,24 @@ import {
  * und bindet die beiden Kommentar-Komponenten ein.
  */
 @Component({
-  selector: 'app-bug-detail',
-  standalone: true,
-  imports: [
-    DatePipe,
-    RouterLink,
-    MatButtonModule,
-    MatDividerModule,
-    MatIconModule,
-    MatProgressBarModule,
-    MatTooltipModule,
-    StatusChipComponent,
-    PriorityChipComponent,
-    AppIsInRolesDirective,
-    CommentListComponent,
-    CommentFormComponent,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './bug-detail.component.html',
-  styleUrl: './bug-detail.component.scss',
+    selector: 'app-bug-detail',
+    imports: [
+        DatePipe,
+        RouterLink,
+        MatButtonModule,
+        MatDividerModule,
+        MatIconModule,
+        MatProgressBarModule,
+        MatTooltipModule,
+        StatusChipComponent,
+        PriorityChipComponent,
+        AppIsInRolesDirective,
+        CommentListComponent,
+        CommentFormComponent,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: './bug-detail.component.html',
+    styleUrl: './bug-detail.component.scss'
 })
 export class BugDetailComponent {
   private readonly bugService = inject(BugService);

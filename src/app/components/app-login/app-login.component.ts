@@ -25,12 +25,11 @@ import { AppAuthService } from '../../service/app.auth.service';
  * reine Navigation - und dieser Baustein lässt sich für sich testen.
  */
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [RouterLink, MatButtonModule, MatDividerModule, MatIconModule, MatMenuModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './app-login.component.html',
-  styleUrl: './app-login.component.scss',
+    selector: 'app-login',
+    imports: [RouterLink, MatButtonModule, MatDividerModule, MatIconModule, MatMenuModule],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: './app-login.component.html',
+    styleUrl: './app-login.component.scss'
 })
 export class AppLoginComponent {
   protected readonly auth = inject(AppAuthService);

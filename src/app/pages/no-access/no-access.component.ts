@@ -10,11 +10,10 @@ import { AppAuthService } from '../../service/app.auth.service';
  * Backend mit HTTP 403 antwortet.
  */
 @Component({
-  selector: 'app-no-access',
-  standalone: true,
-  imports: [RouterLink, MatButtonModule, MatIconModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: 'app-no-access',
+    imports: [RouterLink, MatButtonModule, MatIconModule],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <div class="app-page state">
       <mat-icon class="state__icon">lock</mat-icon>
       <h1 class="state__title">Kein Zugriff</h1>
@@ -32,7 +31,7 @@ import { AppAuthService } from '../../service/app.auth.service';
       </a>
     </div>
   `,
-  styleUrl: './state.scss',
+    styleUrl: './state.scss'
 })
 export class NoAccessComponent {
   protected readonly auth = inject(AppAuthService);

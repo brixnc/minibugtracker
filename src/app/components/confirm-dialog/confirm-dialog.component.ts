@@ -17,11 +17,10 @@ export interface ConfirmDialogData {
  * von Datensätzen eingesetzt.
  */
 @Component({
-  selector: 'app-confirm-dialog',
-  standalone: true,
-  imports: [MatDialogModule, MatButtonModule, MatIconModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: 'app-confirm-dialog',
+    imports: [MatDialogModule, MatButtonModule, MatIconModule],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <h2 mat-dialog-title class="title">
       <mat-icon [class.destructive]="data.destructive">
         {{ data.destructive ? 'warning' : 'help_outline' }}
@@ -47,8 +46,8 @@ export interface ConfirmDialogData {
       </button>
     </mat-dialog-actions>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .title {
         display: flex;
         align-items: center;
@@ -65,7 +64,7 @@ export interface ConfirmDialogData {
         line-height: 1.55;
       }
     `,
-  ],
+    ]
 })
 export class ConfirmDialogComponent {
   readonly dialogRef = inject(MatDialogRef<ConfirmDialogComponent, boolean>);

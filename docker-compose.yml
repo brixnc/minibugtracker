@@ -31,7 +31,7 @@ services:
 
   keycloak:
     image: quay.io/keycloak/keycloak:26.0
-    container_name: minibugtracker-keycloak
+    container_name: minibugtracker-keycloak-v26
     restart: unless-stopped
     # --import-realm liest beim Start alle Dateien aus /opt/keycloak/data/import
     # ein. Dadurch sind Realm, Client, Rollen und Testbenutzer sofort da.

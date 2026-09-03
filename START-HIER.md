@@ -11,7 +11,7 @@ sind es drei Befehle bis zur laufenden Anwendung.
 
 | Ordner / Datei | Inhalt |
 |----------------|--------|
-| `minibugtracker-frontend/` | Angular-18-Anwendung (das Prüfungsprojekt) |
+| `minibugtracker-frontend/` | Angular-19-Anwendung (das Prüfungsprojekt) |
 | `minibugtracker-backend/` | Spring-Boot-REST-Backend, ergänzt um CORS |
 | `keycloak/minibugtracker-realm.json` | Fertiger Keycloak-Realm: Client, Rollen, zwei Testbenutzer |
 | `docker-compose.yml` | Startet PostgreSQL und Keycloak |
@@ -61,6 +61,26 @@ http://localhost:8080/realms/minibugtracker/.well-known/openid-configuration
 ```bash
 cd minibugtracker-backend
 ./mvnw spring-boot:run        # Windows: mvnw.cmd spring-boot:run
+```
+
+Falls `JAVA_HOME` noch auf einen alten JDK-Ordner zeigt, verwendet Windows
+stattdessen den installierten JDK 25 für diesen Terminal:
+
+```bash
+# Git Bash
+export JAVA_HOME="/c/Program Files/Microsoft/jdk-25.0.4.101-hotspot"
+export PATH="$JAVA_HOME/bin:$PATH"
+cd minibugtracker-backend
+./mvnw spring-boot:run
+```
+
+Oder in PowerShell:
+
+```powershell
+$env:JAVA_HOME = "C:\Program Files\Microsoft\jdk-25.0.4.101-hotspot"
+$env:Path = "$env:JAVA_HOME\bin;$env:Path"
+Set-Location minibugtracker-backend
+.\mvnw.cmd spring-boot:run
 ```
 
 Läuft danach auf `http://localhost:9190`.

@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Metals / Bloop (Editor-Hilfsdateien, gehoeren nicht zur Abgabe) ###
+.bloop/
+.metals/

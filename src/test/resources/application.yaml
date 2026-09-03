@@ -36,4 +36,4 @@ spring:
 # Test geladen wird.
 app:
   cors:
-    allowed-origins: http://localhost:4200
+    allowed-origins: http://localhost:4300

@@ -12,8 +12,8 @@ import java.util.List;
 /**
  * CORS-Konfiguration fuer das Angular-Frontend.
  *
- * Das Frontend laeuft im Entwicklungsbetrieb auf http://localhost:4200 und
- * damit auf einem anderen Origin als dieses Backend (http://localhost:9090).
+ * Das Frontend laeuft im Entwicklungsbetrieb auf http://localhost:4300 und
+ * damit auf einem anderen Origin als dieses Backend (http://localhost:9190).
  * Ohne diese Freigabe blockiert der Browser jeden Aufruf aus dem Frontend,
  * noch bevor Spring Security das JWT ueberhaupt sieht.
  *
@@ -23,7 +23,7 @@ import java.util.List;
 @Configuration
 public class CorsConfig {
 
-    @Value("${app.cors.allowed-origins:http://localhost:4200}")
+    @Value("${app.cors.allowed-origins:http://localhost:4300}")
     private List<String> allowedOrigins;
 
     @Bean

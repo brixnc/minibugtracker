@@ -1,9 +1,9 @@
 server:
-  port: 9090
+  port: 9190
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/bugtracker_db
+    url: jdbc:postgresql://127.0.0.1:5432/bugtracker_db
     username: postgres
     password: Colloccollo123#
   jpa:
@@ -21,4 +21,4 @@ spring:
 # Mehrere Origins koennen mit Komma getrennt werden.
 app:
   cors:
-    allowed-origins: http://localhost:4200
+    allowed-origins: http://localhost:4300

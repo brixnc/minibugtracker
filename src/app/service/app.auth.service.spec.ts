@@ -8,6 +8,7 @@ import { AppRoles } from '../app.roles';
 import { CurrentUser } from '../data/user';
 import { environment } from '../../environments/environment';
 import { OAuthServiceStub, fakeAccessToken } from './oauth.stub';
+import { describe, beforeEach, afterEach, it, expect } from 'vitest';
 
 /**
  * Test der Rollenauswertung.

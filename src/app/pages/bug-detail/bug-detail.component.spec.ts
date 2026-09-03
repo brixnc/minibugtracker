@@ -16,6 +16,7 @@ import { AppRoles } from '../../app.roles';
 import { Bug, BugPriority, BugStatus } from '../../data/bug';
 import { Comment } from '../../data/comment';
 import { OAuthServiceStub, fakeAccessToken } from '../../service/oauth.stub';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 /**
  * Test der Detailansicht.

@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 import { AppAuthService } from './service/app.auth.service';
 import { AppRoles } from './app.roles';
 import { OAuthServiceStub, fakeAccessToken } from './service/oauth.stub';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 /** Test der Wurzelkomponente inklusive Kopfzeile und Anmelde-Baustein. */
 describe('AppComponent', () => {

@@ -8,16 +8,6 @@ import { Bug, BugPayload } from '../data/bug';
 /**
  * CRUD-Service für die Ressource `/api/bugs`.
  *
- * Aufbau wie `service/game.service.ts` im Demoprojekt des ÜK: ein
- * `private static readonly backendUrl` mit dem Ressourcennamen, die URL
- * wird aus `environment.backendBaseUrl` zusammengesetzt. Steht das Backend
- * einmal woanders, ändert sich genau eine Zeile in `environment.ts`.
- *
- * Die Methodennamen `getList` / `getOne` sind ebenfalls die des
- * Demoprojekts. `create` und `update` sind bewusst getrennt statt in einem
- * `save()` zusammengefasst - so ist an der Aufrufstelle sichtbar, ob ein
- * POST oder ein PUT ans Backend geht.
- *
  * | Methode | HTTP                     | Backend-Berechtigung |
  * |---------|--------------------------|----------------------|
  * | getList | GET    /api/bugs         | USER oder ADMIN      |

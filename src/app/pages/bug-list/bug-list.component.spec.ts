@@ -14,6 +14,7 @@ import { NotificationService } from '../../service/notification.service';
 import { AppRoles } from '../../app.roles';
 import { Bug, BugPriority, BugStatus } from '../../data/bug';
 import { OAuthServiceStub, fakeAccessToken } from '../../service/oauth.stub';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 
 /**
  * Unit-Test einer Komponente (Bewertungspunkt «Unit Test Komponente»).

@@ -5,6 +5,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { BugService } from './bug.service';
 import { Bug, BugPayload, BugPriority, BugStatus } from '../data/bug';
 import { environment } from '../../environments/environment';
+import { describe, beforeEach, afterEach, it, expect } from 'vitest';
 
 /**
  * Unit-Test des Service-Layers (Bewertungspunkt «Unit Test Service»).

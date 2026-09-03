@@ -8,6 +8,7 @@ import { AppIsInRolesDirective } from './app-is-in-role.dir';
 import { AppAuthService } from '../service/app.auth.service';
 import { AppRoles } from '../app.roles';
 import { OAuthServiceStub, fakeAccessToken } from '../service/oauth.stub';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 /**
  * Test der rollenabhängigen Anzeige (Bewertungspunkt «Teile mindestens

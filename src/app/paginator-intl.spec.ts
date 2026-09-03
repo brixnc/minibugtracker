@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { germanPaginatorIntl } from './paginator-intl';
 
 /** Test der deutschen Beschriftungen für den Material-Paginator. */

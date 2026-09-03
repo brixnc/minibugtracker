@@ -22,6 +22,6 @@ import { MatIconModule } from '@angular/material/icon';
       </a>
     </div>
   `,
-  styleUrl: '../forbidden/state.scss',
+  styleUrl: '../no-access/state.scss',
 })
 export class NotFoundComponent {}

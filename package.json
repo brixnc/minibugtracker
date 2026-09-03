@@ -3,13 +3,14 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --port 4300",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "test:ci": "ng test --watch=false --browsers=ChromeHeadlessNoSandbox",
+    "test:ci": "ng test --watch=false",
     "lint": "ng lint",
-    "lint:fix": "ng lint --fix"
+    "lint:fix": "ng lint --fix",
+    "test:watch": "ng test --watch"
   },
   "private": true,
   "dependencies": {
@@ -23,29 +24,26 @@
     "@angular/platform-browser": "^18.2.0",
     "@angular/platform-browser-dynamic": "^18.2.0",
     "@angular/router": "^18.2.0",
+    "@auth0/angular-jwt": "^5.2.0",
     "@fontsource/roboto": "^5.3.0",
-    "keycloak-angular": "^16.1.0",
-    "keycloak-js": "^25.0.6",
+    "angular-oauth2-oidc": "^18.0.0",
     "material-icons": "^1.13.14",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"
   },
   "devDependencies": {
+    "@analogjs/vite-plugin-angular": "1.19.1",
+    "@analogjs/vitest-angular": "1.19.1",
     "@angular-devkit/build-angular": "^18.2.21",
     "@angular/cli": "^18.2.21",
     "@angular/compiler-cli": "^18.2.0",
-    "@types/jasmine": "~5.1.0",
     "angular-eslint": "18.4.3",
     "eslint": "^9.15.0",
-    "jasmine-core": "~5.2.0",
-    "karma": "~6.4.0",
-    "karma-chrome-launcher": "~3.2.0",
-    "karma-coverage": "~2.2.0",
-    "karma-jasmine": "~5.1.0",
-    "karma-jasmine-html-reporter": "~2.1.0",
+    "jsdom": "^25.0.1",
     "typescript": "~5.5.2",
-    "typescript-eslint": "8.16.0"
+    "typescript-eslint": "8.16.0",
+    "vitest": "^2.1.9"
   },
   "description": "Angular-Frontend zum MiniBugTracker-Backend (UEK Modul 294)"
 }

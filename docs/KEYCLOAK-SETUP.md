@@ -5,38 +5,49 @@ Das Backend erwartet laut `application.yaml` einen Issuer unter
 anmelden kann, braucht es im selben Realm zusätzlich einen öffentlichen
 Client.
 
+Das Frontend spricht Keycloak über **`angular-oauth2-oidc`** an – die
+Bibliothek, die die Wegleitung zur Projektarbeit empfiehlt. Sie spricht
+reines OpenID Connect; für Keycloak sind deshalb keine besonderen
+Einstellungen nötig, ein Standard-Client genügt.
+
+Die Werte aus diesem Dokument stehen im Frontend an genau einer Stelle:
+`src/environments/environment.ts` (Block `keycloak`). Daraus baut
+`src/app/app.auth.ts` die `AuthConfig`.
+
 ---
 
-## 0. Schnellweg: Realm einfach importieren
+## 0. Der kurze Weg: fertiger Realm per Docker
 
-Im Gesamtpaket liegen `docker-compose.yml` und
-`keycloak/minibugtracker-realm.json`. Der Befehl
+Wer `docker compose up -d` aus dem Wurzelverzeichnis des Pakets startet,
+kann dieses Dokument überspringen: `docker-compose.yml` hängt den Ordner
+`keycloak/` als Import-Verzeichnis ein und startet Keycloak mit
+`--import-realm`. Realm, Client, die Rollen `USER` und `ADMIN` sowie die
+beiden Testbenutzer sind dadurch sofort vorhanden.
 
-```bash
-docker compose up -d
+Fertig ist der Import, wenn diese Adresse eine JSON-Antwort liefert:
+
+```text
+http://localhost:8080/realms/minibugtracker/.well-known/openid-configuration
 ```
 
-startet Keycloak und importiert dabei Realm, Client, die Rollen `USER` und
-`ADMIN` sowie zwei Testbenutzer:
-
-| Benutzer | Passwort | Rollen |
-|----------|----------|--------|
-| `testadmin` | `admin123` | ADMIN, USER |
-| `testuser` | `user123` | USER |
-
-Wer das nutzt, kann die Abschnitte 2 bis 5 überspringen und direkt bei
-Abschnitt 6 („Prüfen") weiterlesen. Die Handarbeit unten bleibt für den
-Betrieb ohne Docker und als Nachschlagewerk stehen.
+Die folgenden Abschnitte beschreiben denselben Aufbau von Hand – nötig nur
+ohne Docker oder wenn nachvollzogen werden soll, was der Import anlegt.
 
 ---
 
-## 1. Keycloak starten
+## 1. Keycloak lokal starten
+
+Keycloak kann lokal ohne Docker gestartet werden, z. B. mit der
+offiziellen Keycloak-Distribution:
 
 ```bash
-docker run -p 8080:8080 \
-  -e KEYCLOAK_ADMIN=admin \
-  -e KEYCLOAK_ADMIN_PASSWORD=admin \
-  quay.io/keycloak/keycloak:25.0 start-dev
+bin/kc.sh start-dev
+```
+
+Windows:
+
+```bash
+bin\kc.bat start-dev
 ```
 
 Adminkonsole: <http://localhost:8080/admin> (admin / admin)
@@ -66,11 +77,11 @@ halten. Deshalb wird ein **öffentlicher** Client mit PKCE verwendet.
 
 | Feld                        | Wert                          |
 |-----------------------------|-------------------------------|
-| Root URL                    | `http://localhost:4200`       |
-| Home URL                    | `http://localhost:4200`       |
-| Valid redirect URIs         | `http://localhost:4200/*`     |
-| Valid post logout redirect URIs | `http://localhost:4200/*` |
-| Web origins                 | `http://localhost:4200`       |
+| Root URL                    | `http://localhost:4300`       |
+| Home URL                    | `http://localhost:4300`       |
+| Valid redirect URIs         | `http://localhost:4300/*`     |
+| Valid post logout redirect URIs | `http://localhost:4300/*` |
+| Web origins                 | `http://localhost:4300`       |
 
 7. **Save**
 8. Im Reiter **Advanced** unter *Advanced settings*:
@@ -119,7 +130,7 @@ sieht.
 |--------------------------------|------------------------------------------------------------------|
 | Anmeldung als `testuser`       | Dashboard, Bugs und Projekte sind sichtbar                       |
 | `testuser` in der Bug-Liste    | Es erscheinen **keine** Schaltflächen zum Bearbeiten oder Löschen |
-| `testuser` ruft `/projekte/neu` direkt auf | Weiterleitung auf die Seite „Kein Zugriff“           |
+| `testuser` ruft `/projekte/neu` direkt auf | Der Guard `appCanActivate` leitet auf `/noaccess` um – Seite „Kein Zugriff“ |
 | Anmeldung als `testadmin`      | Bearbeiten, Löschen und „Neues Projekt“ sind sichtbar             |
 | `testadmin` → Profil → „Adminzugriff prüfen“ | Das Backend antwortet mit „Hello admin testadmin“   |
 
@@ -133,4 +144,6 @@ sieht.
 | Weiße Seite, in der Konsole ein CORS-Fehler von :8080 | `Web origins` im Client fehlt                                                          |
 | Anmeldung klappt, jede API-Antwort ist `401`         | Realm im Frontend (`environment.ts`) und Issuer im Backend stimmen nicht überein        |
 | Anmeldung klappt, jede API-Antwort ist `403`         | Dem Benutzer fehlt die Realm-Rolle `USER` oder `ADMIN`                                |
-| CORS-Fehler von :9090 beim Produktionsbuild          | Die CORS-Freigabe im Backend fehlt, siehe `BACKEND-AENDERUNGEN.md`                      |
+| CORS-Fehler von :9190 beim Produktionsbuild          | Die CORS-Freigabe im Backend fehlt, siehe `BACKEND-AENDERUNGEN.md`                      |
+| `invalid_redirect_uri` direkt nach dem Klick auf *Anmelden* | `frontendBaseUrl` in `environment.ts` und `Valid redirect URIs` im Client passen nicht zusammen |
+| Nach dem Login ist man sofort wieder abgemeldet      | Die Tokens liegen im `sessionStorage` – ein neuer Tab hat keine Sitzung. Das ist so gewollt. |

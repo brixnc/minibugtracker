@@ -1,75 +1,46 @@
 import { APP_INITIALIZER, ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptors,
+  withInterceptorsFromDi,
+  withXsrfConfiguration,
+} from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MAT_CARD_CONFIG } from '@angular/material/card';
 import { MatPaginatorIntl } from '@angular/material/paginator';
-import { KeycloakService } from 'keycloak-angular';
+import { AuthConfig, OAuthStorage, provideOAuthClient } from 'angular-oauth2-oidc';
 
 import { routes } from './app.routes';
+import { authConfig } from './app.auth';
 import { environment } from '../environments/environment';
-import { authInterceptor } from './core/interceptors/auth.interceptor';
-import { errorInterceptor } from './core/interceptors/error.interceptor';
-import { AuthService } from './core/services/auth.service';
-import { germanPaginatorIntl } from './core/paginator-intl';
+import { errorInterceptor } from './interceptors/error.interceptor';
+import { AppAuthService } from './service/app.auth.service';
+import { germanPaginatorIntl } from './paginator-intl';
 
-/** Nach dieser Zeit gilt Keycloak als nicht erreichbar. */
-const KEYCLOAK_TIMEOUT_MS = 8000;
-
-/** Hilfsfunktion für das Zeitlimit beim Start von Keycloak. */
-function rejectAfter(milliseconds: number): Promise<never> {
-  return new Promise((_resolve, reject) => {
-    setTimeout(() => reject(new Error('Zeitlimit überschritten')), milliseconds);
-  });
+/**
+ * Speicherort für Tokens.
+ *
+ * `sessionStorage` statt `localStorage` - wie im Demoprojekt des ÜK. Der
+ * Token verschwindet damit beim Schliessen des Tabs und überlebt nicht in
+ * einem gemeinsam genutzten Browser. Das ist die vorsichtigere Wahl; der
+ * Preis ist, dass ein neuer Tab eine neue Anmeldung braucht.
+ */
+export function storageFactory(): OAuthStorage {
+  return sessionStorage;
 }
 
 /**
- * Startet Keycloak, bevor die Anwendung gerendert wird.
+ * Startet OAuth 2, bevor die Anwendung gerendert wird.
  *
- * `check-sso` prüft still im Hintergrund, ob bereits eine Sitzung besteht.
- * Dadurch landet ein bereits angemeldeter Benutzer direkt in der Anwendung,
- * ohne erneut die Login-Maske zu sehen.
- *
- * Schlägt der Start fehl oder antwortet Keycloak nicht innerhalb von
- * `KEYCLOAK_TIMEOUT_MS`, startet die Anwendung trotzdem - dann allerdings
- * abgemeldet. So bleibt die Startseite bedienbar und der Benutzer erhält
- * einen Hinweis statt eines endlos leeren Bildschirms.
+ * Im Demoprojekt (Angular 21) steht dafür
+ * `provideEnvironmentInitializer(() => inject(AppAuthService).initAuth())`.
+ * Dieses Projekt läuft auf Angular 18, wo es diese Kurzform noch nicht
+ * gibt - `APP_INITIALIZER` bewirkt dasselbe.
  */
-function initializeKeycloak(keycloak: KeycloakService, auth: AuthService) {
-  return async (): Promise<void> => {
-    const start = keycloak.init({
-      config: {
-        url: environment.keycloak.url,
-        realm: environment.keycloak.realm,
-        clientId: environment.keycloak.clientId,
-      },
-      initOptions: {
-        onLoad: 'check-sso',
-        silentCheckSsoRedirectUri: `${window.location.origin}/silent-check-sso.html`,
-        checkLoginIframe: false,
-        pkceMethod: 'S256',
-      },
-      // Der Bearer-Token wird von unserem eigenen `authInterceptor` gesetzt.
-      enableBearerInterceptor: false,
-    });
-
-    try {
-      // Antwortet Keycloak nicht, wartet die Anwendung höchstens
-      // KEYCLOAK_TIMEOUT_MS und startet danach abgemeldet weiter.
-      await Promise.race([start, rejectAfter(KEYCLOAK_TIMEOUT_MS)]);
-    } catch {
-      console.warn(
-        '[Keycloak] Start fehlgeschlagen. Läuft der Server auf ' +
-          `${environment.keycloak.url} mit dem Realm "${environment.keycloak.realm}"?`,
-      );
-    }
-
-    auth.syncFromKeycloak();
-
-    // Profil vom Backend nachladen - belegt, dass das Token akzeptiert wird.
-    auth.loadProfile().subscribe();
-  };
+function initializeAuth(auth: AppAuthService) {
+  return (): Promise<void> => auth.initAuth();
 }
 
 export const appConfig: ApplicationConfig = {
@@ -77,18 +48,64 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(
       routes,
+      // Bindet Routenparameter direkt an gleichnamige `input()` der
+      // Komponente - deshalb genügt in BugDetail ein `id = input.required()`
+      // statt der Auswertung von `ActivatedRoute`.
       withComponentInputBinding(),
       withInMemoryScrolling({ scrollPositionRestoration: 'top' }),
     ),
     provideAnimationsAsync(),
-    provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
-    KeycloakService,
+
+    provideHttpClient(
+      // Übersetzt HTTP-Fehler des Backends in verständliche Meldungen.
+      // Der Bearer-Token kommt nicht mehr von hier, sondern vom
+      // `resourceServer` weiter unten.
+      withInterceptors([errorInterceptor]),
+
+      // Bindet den Interceptor ein, den `provideOAuthClient` weiter unten
+      // klassisch über `HTTP_INTERCEPTORS` registriert. Ohne diese Zeile
+      // kennt `provideHttpClient` nur die oben aufgezählten Funktionen,
+      // der Access-Token wird nie angehängt und jeder Aufruf an das
+      // Backend endet mit HTTP 401.
+      withInterceptorsFromDi(),
+
+      // XSRF-Schutz, wie in der Wegleitung zur Projektarbeit aufgeführt.
+      // Dieses Backend arbeitet zustandslos mit JWT und schaltet CSRF ab
+      // (`SecurityConfig`), es setzt also gar kein XSRF-TOKEN-Cookie.
+      // Angular sendet den Header dann schlicht nicht mit. Die Angabe
+      // bleibt trotzdem stehen: Sobald das Backend CSRF einschaltet,
+      // funktioniert das Frontend ohne weitere Änderung.
+      withXsrfConfiguration({
+        cookieName: 'XSRF-TOKEN',
+        headerName: 'X-XSRF-TOKEN',
+      }),
+    ),
+
+    // Die AuthConfig auch als Provider bereitstellen, damit der
+    // OAuthService sie bereits bei seiner Erzeugung kennt.
+    { provide: AuthConfig, useValue: authConfig },
+    { provide: OAuthStorage, useFactory: storageFactory },
+
+    /**
+     * Hängt den Access-Token automatisch an jeden Request, dessen URL mit
+     * `backendBaseUrl` beginnt. Requests an Keycloak selbst bleiben
+     * unberührt - dort wird der Token überhaupt erst ausgestellt.
+     */
+    provideOAuthClient({
+      resourceServer: {
+        sendAccessToken: true,
+        allowedUrls: [environment.backendBaseUrl],
+      },
+    }),
+
     {
       provide: APP_INITIALIZER,
-      useFactory: initializeKeycloak,
+      useFactory: initializeAuth,
       multi: true,
-      deps: [KeycloakService, AuthService],
+      deps: [AppAuthService],
     },
+
+    // --- Darstellung -----------------------------------------------------
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: { appearance: 'outline', subscriptSizing: 'dynamic' },

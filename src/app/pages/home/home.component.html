@@ -8,29 +8,16 @@
     </p>
 
     <div class="hero__actions">
-      @if (auth.isAuthenticated()) {
-        <button mat-flat-button color="primary" type="button" (click)="openDashboard()">
-          <mat-icon>dashboard</mat-icon>
-          Zum Dashboard
-        </button>
-        <a mat-stroked-button routerLink="/bugs">
-          <mat-icon>bug_report</mat-icon>
-          Bugs ansehen
-        </a>
-      } @else {
-        <button mat-flat-button color="primary" type="button" (click)="login()">
-          <mat-icon>login</mat-icon>
-          Mit Keycloak anmelden
-        </button>
-      }
+      <button mat-flat-button color="primary" type="button" (click)="login()">
+        <mat-icon>login</mat-icon>
+        Mit Keycloak anmelden
+      </button>
     </div>
 
-    @if (!auth.isAuthenticated()) {
-      <p class="hero__hint app-muted">
-        Es werden ein laufendes Backend auf <code>http://localhost:9090</code> und ein
-        Keycloak-Realm <code>minibugtracker</code> auf <code>http://localhost:8080</code> benötigt.
-      </p>
-    }
+    <p class="hero__hint app-muted">
+      Es werden ein laufendes Backend auf <code>http://localhost:9190</code> und ein
+      Keycloak-Realm <code>minibugtracker</code> auf <code>http://localhost:8080</code> benötigt.
+    </p>
   </div>
 </section>
 

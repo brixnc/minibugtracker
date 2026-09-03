@@ -1,0 +1,88 @@
+<mat-toolbar class="toolbar">
+  <a class="brand" routerLink="/" aria-label="Zur Startseite">
+    <mat-icon class="brand__icon">bug_report</mat-icon>
+    <span class="brand__name">MiniBugTracker</span>
+  </a>
+
+  @if (auth.isAuthenticated()) {
+    <!-- Schmale Bildschirme: Navigation im Menue, damit sie nicht abgeschnitten wird. -->
+    <button
+      mat-icon-button
+      type="button"
+      class="nav-menu-button"
+      aria-label="Navigation öffnen"
+      [matMenuTriggerFor]="navMenu"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <mat-menu #navMenu="matMenu">
+      <a mat-menu-item routerLink="/dashboard">
+        <mat-icon>dashboard</mat-icon>
+        <span>Dashboard</span>
+      </a>
+      <a mat-menu-item routerLink="/bugs">
+        <mat-icon>bug_report</mat-icon>
+        <span>Bugs</span>
+      </a>
+      <a mat-menu-item routerLink="/projekte">
+        <mat-icon>folder</mat-icon>
+        <span>Projekte</span>
+      </a>
+      <a *appIsInRoles="[roles.Admin]" mat-menu-item routerLink="/projekte/neu">
+        <mat-icon>create_new_folder</mat-icon>
+        <span>Neues Projekt</span>
+      </a>
+    </mat-menu>
+
+    <nav class="nav" aria-label="Hauptnavigation">
+      <a
+        mat-button
+        routerLink="/dashboard"
+        routerLinkActive="nav__link--active"
+        class="nav__link"
+      >
+        <mat-icon>dashboard</mat-icon>
+        <span class="nav__label">Dashboard</span>
+      </a>
+      <a mat-button routerLink="/bugs" routerLinkActive="nav__link--active" class="nav__link">
+        <mat-icon>bug_report</mat-icon>
+        <span class="nav__label">Bugs</span>
+      </a>
+      <a mat-button routerLink="/projekte" routerLinkActive="nav__link--active" class="nav__link">
+        <mat-icon>folder</mat-icon>
+        <span class="nav__label">Projekte</span>
+      </a>
+
+      <!-- Rollenabhängige Anzeige: nur ADMIN darf Projekte anlegen.
+           Deckt sich mit dem Guard auf der Route /projekte/neu und mit
+           @PreAuthorize("hasRole('ADMIN')") auf POST /api/projects. -->
+      <a
+        *appIsInRoles="[roles.Admin]"
+        mat-button
+        routerLink="/projekte/neu"
+        routerLinkActive="nav__link--active"
+        class="nav__link"
+      >
+        <mat-icon>create_new_folder</mat-icon>
+        <span class="nav__label">Neues Projekt</span>
+      </a>
+    </nav>
+  }
+
+  <span class="app-spacer"></span>
+
+  <button
+    mat-icon-button
+    type="button"
+    [matTooltip]="isDark() ? 'Helles Design' : 'Dunkles Design'"
+    [attr.aria-label]="isDark() ? 'Helles Design aktivieren' : 'Dunkles Design aktivieren'"
+    (click)="toggleTheme()"
+  >
+    <mat-icon>{{ isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+  </button>
+
+  <!-- Anmeldung, Benutzermenue und Abmeldung - wie im Demoprojekt als
+       eigener Baustein in der Kopfzeile. -->
+  <app-login />
+</mat-toolbar>

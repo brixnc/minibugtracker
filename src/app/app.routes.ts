@@ -1,110 +1,127 @@
 import { Routes } from '@angular/router';
 
-import { authGuard } from './core/guards/auth.guard';
-import { roleGuard } from './core/guards/role.guard';
-import { AppRole } from './core/models/user.model';
+import { appCanActivate } from './guard/app.guard';
+import { appHomeRedirect } from './guard/app.home.guard';
+import { AppRoles } from './app.roles';
 
 /**
  * Routing der Anwendung.
  *
- * Jede geschützte Route läuft über den `authGuard` (Anmeldung nötig).
- * Routen, die zusätzlich eine bestimmte Realm-Rolle verlangen, ergänzen
- * den `roleGuard` und deklarieren die erlaubten Rollen unter `data.roles`.
+ * Aufbau wie im Demoprojekt des ÜK:
+ *  - ein einziger Guard `appCanActivate` prüft Anmeldung **und** Rollen,
+ *  - die erlaubten Realm-Rollen stehen an der Route unter `data.roles`,
+ *  - wer die Rolle nicht hat, landet auf der Auffangseite `/noaccess`.
+ *
  * Die Berechtigungen entsprechen genau den `@PreAuthorize`-Regeln des
- * Spring-Boot-Backends.
+ * Spring-Boot-Backends. Wo im Backend nur ADMIN schreiben darf, steht hier
+ * `AppRoles.Admin`.
+ *
+ * Alle Seiten werden über `loadComponent` nachgeladen (Lazy Loading, wie im
+ * Kapitel «Routing» des ÜK gezeigt). Der erste Seitenaufruf lädt dadurch
+ * nur die Startseite statt der gesamten Anwendung.
+ *
+ * Die Eigenschaft `title` ist Angulars eigene: Sie schreibt den Text in den
+ * Browser-Tab. Das Demoprojekt legt stattdessen `data.pagetitle` an und
+ * zeigt den Wert selbst an - hier bewusst nicht doppelt geführt.
  */
 export const routes: Routes = [
   {
     path: '',
     title: 'MiniBugTracker',
+    // Öffentliche Startseite: bewusst ohne `appCanActivate`, damit nicht
+    // angemeldete Besucher überhaupt eine Anmeldemöglichkeit sehen und das
+    // Abmelden hier landen kann. `appHomeRedirect` schickt angemeldete
+    // Benutzer weiter auf das Dashboard, die eigentliche Hauptseite.
+    canActivate: [appHomeRedirect],
     loadComponent: () => import('./pages/home/home.component').then((m) => m.HomeComponent),
   },
   {
     path: 'dashboard',
     title: 'Dashboard | MiniBugTracker',
-    canActivate: [authGuard],
+    canActivate: [appCanActivate],
+    // Keine `roles`-Angabe: angemeldet sein genügt.
     loadComponent: () =>
-      import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+      import('./pages/dashboard/dashboard.component').then((m) => m.DashboardComponent),
   },
 
   // --- Bugs --------------------------------------------------------------
   {
     path: 'bugs',
     title: 'Bugs | MiniBugTracker',
-    canActivate: [authGuard],
+    canActivate: [appCanActivate],
     loadComponent: () =>
-      import('./features/bugs/bug-list/bug-list.component').then((m) => m.BugListComponent),
+      import('./pages/bug-list/bug-list.component').then((m) => m.BugListComponent),
   },
   {
     path: 'bugs/neu',
     title: 'Neuer Bug | MiniBugTracker',
-    canActivate: [authGuard, roleGuard],
-    data: { roles: [AppRole.USER, AppRole.ADMIN] },
+    canActivate: [appCanActivate],
+    // POST /api/bugs steht USER und ADMIN offen.
+    data: { roles: [AppRoles.User, AppRoles.Admin] },
     loadComponent: () =>
-      import('./features/bugs/bug-form/bug-form.component').then((m) => m.BugFormComponent),
+      import('./pages/bug-form/bug-form.component').then((m) => m.BugFormComponent),
   },
   {
     path: 'bugs/:id/bearbeiten',
     title: 'Bug bearbeiten | MiniBugTracker',
-    canActivate: [authGuard, roleGuard],
-    data: { roles: [AppRole.ADMIN] },
+    canActivate: [appCanActivate],
+    // PUT /api/bugs/{id} ist ADMIN vorbehalten.
+    data: { roles: [AppRoles.Admin] },
     loadComponent: () =>
-      import('./features/bugs/bug-form/bug-form.component').then((m) => m.BugFormComponent),
+      import('./pages/bug-form/bug-form.component').then((m) => m.BugFormComponent),
   },
   {
+    // Muss nach 'bugs/neu' stehen, sonst würde ':id' das Wort "neu" schlucken.
     path: 'bugs/:id',
     title: 'Bug-Details | MiniBugTracker',
-    canActivate: [authGuard],
+    canActivate: [appCanActivate],
     loadComponent: () =>
-      import('./features/bugs/bug-detail/bug-detail.component').then((m) => m.BugDetailComponent),
+      import('./pages/bug-detail/bug-detail.component').then((m) => m.BugDetailComponent),
   },
 
   // --- Projekte ----------------------------------------------------------
   {
     path: 'projekte',
     title: 'Projekte | MiniBugTracker',
-    canActivate: [authGuard],
+    canActivate: [appCanActivate],
     loadComponent: () =>
-      import('./features/projects/project-list/project-list.component').then(
-        (m) => m.ProjectListComponent,
-      ),
+      import('./pages/project-list/project-list.component').then((m) => m.ProjectListComponent),
   },
   {
     path: 'projekte/neu',
     title: 'Neues Projekt | MiniBugTracker',
-    canActivate: [authGuard, roleGuard],
-    data: { roles: [AppRole.ADMIN] },
+    canActivate: [appCanActivate],
+    // POST /api/projects ist ADMIN vorbehalten.
+    data: { roles: [AppRoles.Admin] },
     loadComponent: () =>
-      import('./features/projects/project-form/project-form.component').then(
-        (m) => m.ProjectFormComponent,
-      ),
+      import('./pages/project-form/project-form.component').then((m) => m.ProjectFormComponent),
   },
   {
     path: 'projekte/:id/bearbeiten',
     title: 'Projekt bearbeiten | MiniBugTracker',
-    canActivate: [authGuard, roleGuard],
-    data: { roles: [AppRole.ADMIN] },
+    canActivate: [appCanActivate],
+    data: { roles: [AppRoles.Admin] },
     loadComponent: () =>
-      import('./features/projects/project-form/project-form.component').then(
-        (m) => m.ProjectFormComponent,
-      ),
+      import('./pages/project-form/project-form.component').then((m) => m.ProjectFormComponent),
   },
 
   // --- Benutzer ----------------------------------------------------------
   {
     path: 'profil',
     title: 'Mein Profil | MiniBugTracker',
-    canActivate: [authGuard],
+    canActivate: [appCanActivate],
     loadComponent: () =>
-      import('./features/profile/profile.component').then((m) => m.ProfileComponent),
+      import('./pages/profile/profile.component').then((m) => m.ProfileComponent),
   },
 
   // --- Fehlerseiten ------------------------------------------------------
   {
-    path: 'kein-zugriff',
+    // Pfadname wie im Demoprojekt, damit der Guard-Fallback wiedererkennbar
+    // bleibt. Ohne Guard - sonst käme man bei fehlender Rolle nie an.
+    path: 'noaccess',
     title: 'Kein Zugriff | MiniBugTracker',
     loadComponent: () =>
-      import('./pages/forbidden/forbidden.component').then((m) => m.ForbiddenComponent),
+      import('./pages/no-access/no-access.component').then((m) => m.NoAccessComponent),
   },
   {
     path: '**',

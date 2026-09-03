@@ -22,16 +22,16 @@ Frontend und Backend laufen auf verschiedenen Ports:
 
 | Anwendung | Adresse                 |
 |-----------|-------------------------|
-| Frontend  | `http://localhost:4200` |
-| Backend   | `http://localhost:9090` |
+| Frontend  | `http://localhost:4300` |
+| Backend   | `http://localhost:9190` |
 
 Für den Browser sind das zwei verschiedene *Origins*. Ohne CORS-Freigabe
 blockiert er jeden Aufruf aus dem Frontend, **bevor** Spring Security das
 Keycloak-Token überhaupt auswerten kann. In der Konsole erscheint dann:
 
 ```text
-Access to XMLHttpRequest at 'http://localhost:9090/api/bugs' from origin
-'http://localhost:4200' has been blocked by CORS policy
+Access to XMLHttpRequest at 'http://localhost:9190/api/bugs' from origin
+'http://localhost:4300' has been blocked by CORS policy
 ```
 
 Besonders zu beachten: Der Browser schickt vor jedem `PUT`, `POST` und
@@ -48,7 +48,7 @@ Deshalb muss die CORS-Verarbeitung **vor** der Autorisierung greifen.
 @Configuration
 public class CorsConfig {
 
-    @Value("${app.cors.allowed-origins:http://localhost:4200}")
+    @Value("${app.cors.allowed-origins:http://localhost:4300}")
     private List<String> allowedOrigins;
 
     @Bean
@@ -104,7 +104,7 @@ Der `CorsFilter` läuft dadurch früh in der Filterkette und beantwortet den
 # Mehrere Origins koennen mit Komma getrennt werden.
 app:
   cors:
-    allowed-origins: http://localhost:4200
+    allowed-origins: http://localhost:4300
 ```
 
 Für einen späteren Betrieb genügt es, hier die Produktionsadresse
@@ -120,7 +120,7 @@ Das Frontend funktioniert im Entwicklungsbetrieb **auch ohne** diese
 ```json
 {
   "/api": {
-    "target": "http://localhost:9090",
+    "target": "http://localhost:9190",
     "secure": false,
     "changeOrigin": true
   }
@@ -132,7 +132,7 @@ reicht sie an das Backend weiter. Für den Browser bleibt alles auf einem
 Origin, CORS entfällt.
 
 Für den **Produktionsbuild** greift dieser Proxy nicht mehr &ndash; dort spricht
-das Frontend `http://localhost:9090/api` direkt an. Deshalb ist die
+das Frontend `http://localhost:9190/api` direkt an. Deshalb ist die
 CORS-Freigabe der saubere Weg.
 
 ---
@@ -140,8 +140,8 @@ CORS-Freigabe der saubere Weg.
 ## 6. Prüfen
 
 ```bash
-curl -i -X OPTIONS http://localhost:9090/api/bugs \
-  -H "Origin: http://localhost:4200" \
+curl -i -X OPTIONS http://localhost:9190/api/bugs \
+  -H "Origin: http://localhost:4300" \
   -H "Access-Control-Request-Method: GET" \
   -H "Access-Control-Request-Headers: authorization"
 ```
@@ -149,7 +149,7 @@ curl -i -X OPTIONS http://localhost:9090/api/bugs \
 Erwartet wird `HTTP/1.1 200` mit den Kopfzeilen:
 
 ```text
-Access-Control-Allow-Origin: http://localhost:4200
+Access-Control-Allow-Origin: http://localhost:4300
 Access-Control-Allow-Methods: GET,POST,PUT,DELETE,OPTIONS
 Access-Control-Allow-Headers: Authorization, Content-Type, Accept
 ```

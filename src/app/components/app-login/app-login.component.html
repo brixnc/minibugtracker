@@ -1,0 +1,42 @@
+@if (auth.isAuthenticated()) {
+  <button
+    mat-button
+    type="button"
+    class="account"
+    [matMenuTriggerFor]="accountMenu"
+    aria-label="Benutzermenü öffnen"
+  >
+    <span class="avatar" aria-hidden="true">{{ auth.initials() }}</span>
+    <span class="account__name">{{ auth.displayName() }}</span>
+    <mat-icon class="account__caret">expand_more</mat-icon>
+  </button>
+
+  <mat-menu #accountMenu="matMenu" xPosition="before">
+    <div class="menu-head">
+      <p class="menu-head__name">{{ auth.displayName() }}</p>
+      <!-- Die Realm-Rollen aus dem Keycloak-Token, direkt sichtbar gemacht.
+           Erspart beim Vorführen den Umweg über die Entwicklerwerkzeuge. -->
+      <p class="menu-head__roles">
+        @for (role of auth.roles(); track role) {
+          <span class="menu-head__role">{{ role }}</span>
+        } @empty {
+          <span class="menu-head__role">Keine Rolle zugewiesen</span>
+        }
+      </p>
+    </div>
+    <mat-divider />
+    <a mat-menu-item routerLink="/profil">
+      <mat-icon>account_circle</mat-icon>
+      <span>Mein Profil</span>
+    </a>
+    <button mat-menu-item type="button" (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      <span>Abmelden</span>
+    </button>
+  </mat-menu>
+} @else {
+  <button mat-flat-button color="primary" type="button" (click)="login()">
+    <mat-icon>login</mat-icon>
+    Anmelden
+  </button>
+}

@@ -4,12 +4,9 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
-    "types": [
-      "jasmine"
-    ]
+    /* Statt "jasmine" jetzt die Globals von Vitest (describe/it/expect/vi).
+       Vitest bringt sie als eigene Typdefinitionen mit. */
+    "types": ["vitest/globals", "node"]
   },
-  "include": [
-    "src/**/*.spec.ts",
-    "src/**/*.d.ts"
-  ]
+  "include": ["src/**/*.spec.ts", "src/**/*.d.ts", "src/test-setup.ts", "vitest.config.mts"]
 }

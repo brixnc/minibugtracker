@@ -1,0 +1,91 @@
+<div class="app-page">
+  <header class="app-page__header">
+    <div>
+      <h1 class="app-page__title">Projekte</h1>
+      <p class="app-page__subtitle">
+        {{ visibleProjects().length }} Projekt(e) &middot; Anlegen und Bearbeiten ist der
+        Rolle ADMIN vorbehalten.
+      </p>
+    </div>
+    <div class="header-actions">
+      <button mat-stroked-button type="button" (click)="load()">
+        <mat-icon>refresh</mat-icon>
+        Aktualisieren
+      </button>
+      <a *appIsInRoles="[roles.Admin]" mat-flat-button color="primary" routerLink="/projekte/neu">
+        <mat-icon>add</mat-icon>
+        Neues Projekt
+      </a>
+    </div>
+  </header>
+
+  <mat-form-field class="search">
+    <mat-label>Projekte durchsuchen</mat-label>
+    <input matInput type="search" [ngModel]="search()" (ngModelChange)="search.set($event)" />
+    <mat-icon matPrefix>search</mat-icon>
+  </mat-form-field>
+
+  @if (loading()) {
+    <mat-progress-bar mode="indeterminate" aria-label="Projekte werden geladen" />
+  }
+
+  @if (!loading() && visibleProjects().length === 0) {
+    <div class="app-card">
+      @if (filteredToNothing()) {
+        <app-empty-state
+          icon="search_off"
+          title="Keine Treffer"
+          hint="Kein Projekt passt zu diesem Suchbegriff."
+        />
+      } @else {
+        <app-empty-state
+          icon="folder_open"
+          title="Noch keine Projekte"
+          hint="Projekte bündeln die Arbeit des Teams. Anlegen darf sie die Rolle ADMIN."
+        >
+          <a *appIsInRoles="[roles.Admin]" mat-flat-button color="primary" routerLink="/projekte/neu">
+            Erstes Projekt anlegen
+          </a>
+        </app-empty-state>
+      }
+    </div>
+  } @else {
+    <section class="grid">
+      @for (project of visibleProjects(); track project.id) {
+        <article class="app-card project">
+          <header class="project__head">
+            <span class="project__badge" aria-hidden="true">{{ initials(project.name) }}</span>
+            <div class="project__heading">
+              <h2 class="project__name">{{ project.name }}</h2>
+              @if (project.createdAt) {
+                <span class="project__date app-muted">
+                  seit {{ project.createdAt | date: 'dd.MM.yyyy' }}
+                </span>
+              }
+            </div>
+          </header>
+
+          <p class="project__text app-muted">
+            {{ project.description || 'Keine Beschreibung hinterlegt.' }}
+          </p>
+
+          <!-- Rollenabhängige Aktionen: nur ADMIN. -->
+          <footer class="project__actions">
+            <a
+              *appIsInRoles="[roles.Admin]"
+              mat-button
+              [routerLink]="['/projekte', project.id, 'bearbeiten']"
+            >
+              <mat-icon>edit</mat-icon>
+              Bearbeiten
+            </a>
+            <button *appIsInRoles="[roles.Admin]" mat-button type="button" (click)="remove(project)">
+              <mat-icon>delete_outline</mat-icon>
+              Löschen
+            </button>
+          </footer>
+        </article>
+      }
+    </section>
+  }
+</div>

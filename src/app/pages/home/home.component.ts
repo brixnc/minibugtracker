@@ -1,27 +1,26 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
-import { AuthService } from '../../core/services/auth.service';
+import { AppAuthService } from '../../service/app.auth.service';
 
 /**
- * Oeffentliche Startseite.
+ * Oeffentliche Startseite fuer nicht angemeldete Besucher.
  *
- * Nicht angemeldete Besucher sehen hier den Einstieg in den Login-Vorgang,
- * angemeldete Benutzer den direkten Weg ins Dashboard.
+ * Angemeldete Benutzer sehen diese Seite nicht: `appHomeRedirect` schickt
+ * sie direkt auf das Dashboard. Die Seite wird trotzdem gebraucht, denn
+ * Keycloak kehrt nach dem Abmelden hierher zurueck.
  */
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, MatButtonModule, MatIconModule],
+  imports: [MatButtonModule, MatIconModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
-  private readonly router = inject(Router);
-  protected readonly auth = inject(AuthService);
+  private readonly auth = inject(AppAuthService);
 
   /** Die drei Kacheln unterhalb des Einstiegs. */
   protected readonly features = [
@@ -42,13 +41,14 @@ export class HomeComponent {
     },
   ];
 
-  /** Startet den Login und kehrt danach ins Dashboard zurück. */
+  /**
+   * Startet den Login bei Keycloak.
+   *
+   * `/dashboard` reist als OAuth-`state` mit; nach der Rückkehr wertet die
+   * Wurzelkomponente ihn aus und navigiert dorthin. Ohne das landete man
+   * immer auf der `redirectUri` aus `app.auth.ts`, also auf dieser Seite.
+   */
   protected login(): void {
-    void this.auth.login(`${window.location.origin}/dashboard`);
-  }
-
-  /** Wechselt für bereits angemeldete Benutzer ins Dashboard. */
-  protected openDashboard(): void {
-    void this.router.navigate(['/dashboard']);
+    this.auth.login('/dashboard');
   }
 }
